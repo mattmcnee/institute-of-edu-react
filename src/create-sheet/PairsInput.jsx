@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import './form.css';
 
 const PairsInput = ({ inputValue, onJsonData, blockId }) => {

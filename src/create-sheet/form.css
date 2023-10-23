@@ -115,6 +115,10 @@
 	justify-content: center;
 }
 
+.react-form .input-area .drag-handle:hover{
+	cursor: grab;
+}
+
 .react-form .input-area .drag-handle i{
 	flex-grow: 1;
 	margin: 0 10px ;

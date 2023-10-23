@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import PairsInput from './PairsInput.jsx';
 import MediaInput from './MediaInput.jsx';
 import './form.css';
-
 
 const Form = () => {
   const [selectedOption, setSelectedOption] = useState("subheading");
