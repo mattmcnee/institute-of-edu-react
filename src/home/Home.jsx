@@ -5,23 +5,23 @@ const Home = ({setTitle}) => {
   setTitle("Edu Homepage");
   return (
     <div className="home-page">
-        <nav className="video-nav flex-div">
-                    <div className="nav-left flex-div">
-                        <i className="fas fa-bars menu-icon hover-div"></i>
-                        <div className="hover-div">New Worksheet</div>
-                    </div>
-                    <div className="nav-middle flex-div">
-                        <div className="bar-content">
-                            <div className="progress-container" id="main-bar"></div>
-                        </div>
-                    </div>
-                    <div className="nav-right flex-div">
-                        <div className="hover-div" id="nav-week">
-                            MarginalRabbit45
-                        </div>
-                        <i className="fas fa-user hover-div"></i>
-                    </div>
-                </nav>
+      <nav className="video-nav flex-div">
+        <div className="nav-left flex-div">
+          <i className="fas fa-bars menu-icon hover-div"></i>
+          <div className="hover-div">New Worksheet</div>
+        </div>
+        <div className="nav-middle flex-div">
+          <div className="bar-content">
+            <div className="progress-container" id="main-bar"></div>
+          </div>
+        </div>
+        <div className="nav-right flex-div">
+          <div className="hover-div" id="nav-week">
+            MarginalRabbit45
+          </div>
+          <i className="fas fa-user hover-div"></i>
+        </div>
+      </nav>
       <div className="hero-section">
         <h1>Welcome to Edu</h1>
         <p>Empowering Education, One Click at a Time</p>

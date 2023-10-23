@@ -12,7 +12,7 @@ const MediaInput = ({ onJsonData, blockId }) => {
 
     const newData = extractIds(newValue);
 
-    url = "https://docs.google.com/presentation/d/"+newData.mainId+"/embed?start=false&slide=id."+newData.slideId;
+    // url = "https://docs.google.com/presentation/d/"+newData.mainId+"/embed?start=false&slide=id."+newData.slideId;
 
     const jsonData = {
       "id": blockId,
@@ -36,10 +36,10 @@ const MediaInput = ({ onJsonData, blockId }) => {
       type = "photo";
     }
 
+    var embedUrl = "";
     if (match) {
         const mainId = match[1] || match[3];
         const slideId = match[2] || null;
-        var embedUrl;
         if(type == "slide"){
           embedUrl = "https://docs.google.com/presentation/d/"+mainId+"/embed?start=false&slide=id."+slideId;
         }
@@ -48,7 +48,7 @@ const MediaInput = ({ onJsonData, blockId }) => {
         }
         return { mainId, slideId, type, embedUrl };
     } else {
-        return null;
+        return {embedUrl };
     }
 }
 
