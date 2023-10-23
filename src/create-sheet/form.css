@@ -1,0 +1,208 @@
+:root{
+  --form-outline: #aaa;
+  --form-outline-bold: #888;
+}
+
+
+.react-form{
+	padding-top: 10px;
+}
+
+.react-form .input-area{
+	border: 1px solid var(--form-outline-bold);
+	border-radius: 6px;
+	display: flex;
+	position: relative;
+	margin: 0px 20px 20px 20px;
+	background-color: white;
+}
+
+.react-form .input-area .top-input{
+	display: flex;
+	flex-grow: 1;
+	flex-direction: column;
+}
+
+.react-form .input-area .main-input{
+	flex-grow: 1;
+	border: none;
+	border-radius: 6px;
+	outline: none;
+	margin: 0 0 5px 10px;
+	font-family: inherit;
+}
+
+.react-form .input-area textarea.main-input{
+	height: 92px;
+	resize: none;
+}
+
+.react-form .input-area label{
+	font-size: 0.8em;
+	color: #333;
+	padding: 6px 8px;
+}
+
+.react-form .input-area .extra-input{
+	box-sizing: border-box;
+	width: 100%;
+	min-height: 1.5em;
+	max-height: 12em;
+	outline: none;
+	resize: none;
+	border-radius: 0;
+	border: none;
+	flex-grow: 0;
+	margin: 0;
+}
+
+.react-form .extra-input-holder .textarea{
+	width: 100%;
+	flex-grow: 1;
+}
+
+.react-form .extra-input-holder .textarea textarea{
+	padding: 3px 4px;
+	border-radius: 6px;
+}
+
+.react-form .input-area .extra-input-holder{
+	display: flex;
+	flex-direction: row;
+	border: 1px solid var(--form-outline-bold);
+	border-radius: 6px;
+	margin: 0 20px 20px 20px;
+	background-color: white;
+}
+
+.react-form .extra-input-gap{
+	width: 60px;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	border-left: 1px solid var(--form-outline);
+	border-right: 1px solid var(--form-outline);
+}
+
+.react-form .input-area textarea::placeholder, .react-form .input-area input::placeholder{
+  color: #555;
+}
+
+.react-form .input-area button.top-input, .react-form .add-input button{
+	border: none;
+	border-top-right-radius: 6px;
+	border-bottom-right-radius: 6px;
+	border-left: 1px solid var(--form-outline-bold);
+	background-color: white;
+	padding: 0 15px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-grow: 0;
+}
+
+.react-form .input-area button:hover, .react-form .add-input button:hover, .react-form .add-input select:hover{
+	cursor: pointer;
+}
+
+.react-form .input-area .drag-handle{
+	padding: 5px 4px;
+	display: flex;
+	align-items: center;
+	border-left: 1px solid var(--form-outline-bold);
+	justify-content: center;
+}
+
+.react-form .input-area .drag-handle i{
+	flex-grow: 1;
+	margin: 0 10px ;
+}
+
+.react-form .add-input{
+	width: 50%;
+	display: flex;
+	margin: 10px 20px;
+	border-radius: 6px;
+	border: 1px solid var(--form-outline);
+}
+
+.react-form .add-input select{
+	flex-grow: 1;
+	border: none;
+	border-radius: 6px;
+	outline: none;
+	padding: 5px 4px;
+	font-size: 0.8em;
+}
+
+.react-form .submit-form button{
+	display: flex;
+	padding: 5px 4px;
+	border-radius: 6px;
+	border: 1px solid var(--form-outline);
+	background-color: white;
+	margin: 10px 20px;
+}
+
+.react-form .submit-form button:hover{
+	cursor: pointer;
+}
+
+.react-form .extra-input-gap button, .react-form .extra-input-gap .drag-handle{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 8px 6px;
+	border-radius: 0;
+	border: none;
+	border-bottom: 1px solid var(--form-outline);
+	background-color: white;
+	flex-grow: 1;
+	width: 100%;
+	text-align: center;
+	box-sizing: border-box;
+}
+
+.react-form .extra-input-gap button:last-child{
+	border: none;
+}
+
+.react-form .extra-input-add button{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 8px 6px;
+	border-radius: 6px;
+	border: none;
+	background-color: white;
+	width: 60px;
+}
+
+.react-form .extra-input-add{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	border-top: 1px solid var(--form-outline-bold);
+}
+
+.react-form .drop-scroll{
+	max-height: 340px;
+	overflow-y: scroll;
+}
+
+.react-form .rotate-button.rotated i{
+	transform: rotate(180deg);
+	transition: transform 0.5s ease-in-out;
+}
+
+.react-form .rotate-button:not(.rotated) i{
+	transform: rotate(0deg);
+	transition: transform 0.5s ease-in-out;
+}
+
+.react-form iframe.media-display{
+	border-bottom-left-radius: 5px;
+}
