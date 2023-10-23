@@ -4,12 +4,16 @@ import Home from './home/Home.jsx';
 import CreateSheet from './create-sheet/CreateSheet.jsx';
 import './App.css'
 
-const App = () => {
+const App = ({onTitleString}) => {
+  const updateTitleString = (data) => {
+    onTitleString(data);
+  }
+
   return (
     <Router>
       <Routes>
-        <Route exact path="/" element={<Home />} />
-        <Route path="/create" element={<CreateSheet/>} />
+        <Route exact path="/" element={<Home setTitle={updateTitleString}/>} />
+        <Route path="/create" element={<CreateSheet setTitle={updateTitleString}/>} />
       </Routes>
     </Router>
   );

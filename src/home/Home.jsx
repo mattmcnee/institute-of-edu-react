@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Home = () => {
+const Home = ({setTitle}) => {
+  setTitle("Edu Homepage");
   return (
     <div className="home-page">
         <nav className="video-nav flex-div">

@@ -1,7 +1,9 @@
 import React from 'react';
 import Form from './Form.jsx';
 
-const CreateSheet = () => {
+const CreateSheet = ({setTitle}) => {
+    setTitle("New Worksheet");
+
     return (
         <div className="create-page">
                 <nav className="video-nav flex-div">
