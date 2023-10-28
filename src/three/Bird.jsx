@@ -16,6 +16,37 @@ let questions = [
     {"question": ["Calculate the perimeter of a square with side length 10", "40", "36", "44", "38"]}
 ]
 
+function shuffleAnswers(questionObj) {
+    const question = questionObj.question[0];
+    const answers = questionObj.question.slice(1);
+    const correctAnswer = questionObj.question[1];
+    
+    // Shuffle the answers (Fisher-Yates algorithm)
+    for (let i = answers.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [answers[i], answers[j]] = [answers[j], answers[i]];
+    }
+
+  const shuffleAnswers = [];
+  shuffleAnswers.push(question);
+  shuffleAnswers.push(...answers);
+    
+    return {
+        question: shuffleAnswers,
+        answer: correctAnswer
+    };
+}
+
+// // Example usage
+// const questionObject = {
+//     "question": ["What is 4 * 5?", "20", "18", "22", "25"]
+// };
+
+// const shuffledQuestion = shuffleAnswers(questionObject);
+// const shuffledQuestionJSON = JSON.stringify(shuffledQuestion);
+// console.log(shuffledQuestionJSON);
+
+
 
 
 
@@ -68,6 +99,41 @@ fontLoader.load('src/three/helvetiker_bold.typeface.json', function (font) {
     }
 });
 
+function makeRows(row, font, gap){
+  const cubeRow = [];
+  const cubeGeometry = new THREE.BoxGeometry(0.5, 3, -0.1);
+  const cubePassMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 })
+  const cubeFailMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 })
+
+  const shuffled = shuffleAnswers(questions[row]);
+
+  for (let i = 0; i < 5; i++) {
+    if(i!=0){
+
+      const cubeMaterial = (shuffled.question[i] == shuffled.answer) ? cubePassMaterial : cubeFailMaterial
+      const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+      cube.position.set((row+2)*gap, i * 3 - 6.5, 0);
+        scene.add(cube);
+        cubeRow.push(cube);  
+    }
+
+    const textGeometry = new TextGeometry(breakLines(shuffled.question[i]), {
+        font: font,
+        size: (i === 0) ? 0.3 : 0.5,
+        height: 0.001,
+    });
+
+    const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+    if(i == 0){
+      textMesh.position.set((row+2)*gap - 6.5, 0.9, 0);
+    }else{
+      textMesh.position.set((row+2)*gap - 0.5, i * 3 - 6.8, 0);
+    }
+      scene.add(textMesh);
+      cubeRow.push(textMesh);
+  }
+  return cubeRow;
+}
 
 
 function breakLines(text) {
@@ -89,50 +155,6 @@ function breakLines(text) {
     result += currentLine.trim();
 
     return result;
-}
-
-// Example usage
-const inputText = "This is a sample text that needs to be broken into multiple lines without exceeding 30 characters in each line.";
-const formattedText = breakLines(inputText);
-console.log(formattedText);
-
-
-
-
-
-
-
-
-
-
-
-
-function makeRows(row, font, gap){
-  const cubeRow = [];
-  const cubeGeometry = new THREE.BoxGeometry(0.5, 0.1, 0.1);
-  const cubeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-  for (let i = 0; i < 5; i++) {
-    const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-    cube.position.set((row+2)*gap, i * 3 - 5, 0);
-    scene.add(cube);
-    cubeRow.push(cube);
-
-    const textGeometry = new TextGeometry(breakLines(questions[row].question[i]), {
-        font: font,
-        size: (i === 0) ? 0.3 : 0.5,
-        height: 0.001,
-    });
-
-    const textMesh = new THREE.Mesh(textGeometry, textMaterial);
-    if(i == 0){
-      textMesh.position.set((row+2)*gap - 6.5, 0.9, 0);
-    }else{
-      textMesh.position.set((row+2)*gap - 0.5, i * 3 - 6.8, 0);
-    }
-      scene.add(textMesh);
-      cubeRow.push(textMesh);
-  }
-  return cubeRow;
 }
 
 
