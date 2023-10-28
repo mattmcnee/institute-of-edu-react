@@ -28,6 +28,18 @@ const Home = ({setTitle}) => {
         <Link to="/create">
           <button className="cta-button">Create Your Worksheet</button>
         </Link>
+        <Link to="/chart">
+          <button className="cta-button">View Chart Demo</button>
+        </Link>
+        <Link to="/quiz">
+          <button className="cta-button">View Quiz Demo</button>
+        </Link>
+        <Link to="/bird">
+          <button className="cta-button">View Bird Demo</button>
+        </Link>
+
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/aDUvCLAp0uU" frameborder="0" allowfullscreen></iframe>
+
       </div>
       <div className="featured-courses">
         <h2>Featured Courses</h2>
