@@ -45,8 +45,10 @@ function shuffleAnswers(questionObj) {
 }
 
 console.log("hello")
+runGame();
 
-// Set up Three.js scene
+function runGame(){
+  // Set up Three.js scene
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer();
@@ -226,14 +228,20 @@ const animate = () => {
   }
 
   renderer.render(scene, camera);
-};
+
+  };
 
 animate();
+
+}
+
+
+
 
     return () => {
       // Cleanup logic if necessary
     };
-  }, []); // Empty dependency array ensures useEffect runs once after initial render
+  }, []);
 
   return <div id="flappy-bird-container" />;
 };
