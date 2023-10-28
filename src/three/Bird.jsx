@@ -3,7 +3,14 @@ import * as THREE from 'three';
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 
-let questions = [
+const Bird = ({setTitle}) => {
+  setTitle("Edu Homepage");
+  useEffect(() => {
+
+
+
+
+    let questions = [
     {"question": ["What is 4 * 5?", "20", "18", "22", "25"]},
     {"question": ["Solve for x: 2x + 7 = 15", "4", "5", "3", "6"]},
     {"question": ["Calculate the area of a rectangle with length 8 and width 6", "48", "40", "54", "50"]},
@@ -37,33 +44,28 @@ function shuffleAnswers(questionObj) {
     };
 }
 
-// // Example usage
-// const questionObject = {
-//     "question": ["What is 4 * 5?", "20", "18", "22", "25"]
-// };
+console.log("hello")
 
-// const shuffledQuestion = shuffleAnswers(questionObject);
-// const shuffledQuestionJSON = JSON.stringify(shuffledQuestion);
-// console.log(shuffledQuestionJSON);
-
-
-
-
-
+// Set up Three.js scene
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer();
+camera.position.z = 10;
+camera.position.y = 2;
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
+document.getElementById('flappy-bird-container').appendChild(renderer.domElement);
 
 
-
-const Bird = () => {
-  useEffect(() => {
-    // Set up Three.js scene
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer();
-    camera.position.z = 10;
-    camera.position.y = 2;
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
-    document.getElementById('flappy-bird-container').appendChild(renderer.domElement);
+window.addEventListener('resize', () => {
+  const newWidth = window.innerWidth;
+  const newHeight = window.innerHeight;
+  // Update renderer size
+  renderer.setSize(newWidth, newHeight);
+  // Update camera aspect ratio
+  camera.aspect = newWidth / newHeight;
+  camera.updateProjectionMatrix();
+});
 
 // Bird setup
 const birdGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
@@ -91,15 +93,19 @@ const textMaterial = new THREE.MeshBasicMaterial({ color: 0xcccccc });
 
 // Load the Open Sans font
 const movingCubes = [];
+var unset = true;
 fontLoader.load('src/three/helvetiker_bold.typeface.json', function (font) {
-
-
+  if(unset){
     for (let row = 0; row < 8; row++) {
-      movingCubes.push(makeRows(row, font, 10));
+      movingCubes.push(makeCol(row, font, 10));
     }
+
+    console.log(movingCubes);
+    unset = false;
+  }
 });
 
-function makeRows(row, font, gap){
+function makeCol(row, font, gap){
   const cubeRow = [];
   const cubeGeometry = new THREE.BoxGeometry(0.5, 3, -0.1);
   const cubePassMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 })
@@ -110,11 +116,19 @@ function makeRows(row, font, gap){
   for (let i = 0; i < 5; i++) {
     if(i!=0){
 
-      const cubeMaterial = (shuffled.question[i] == shuffled.answer) ? cubePassMaterial : cubeFailMaterial
-      const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-      cube.position.set((row+2)*gap, i * 3 - 6.5, 0);
+      if (shuffled.question[i] == shuffled.answer){
+        const cubeMaterial = cubePassMaterial;
+        const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+        cube.position.set((row+2)*gap, i * 3 - 6.5, 0);
         scene.add(cube);
-        cubeRow.push(cube);  
+        cubeRow.push([cube, "pass"]);  
+      }else{
+        const cubeMaterial = cubeFailMaterial;
+        const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+        cube.position.set((row+2)*gap, i * 3 - 6.5, 0);
+        scene.add(cube);
+        cubeRow.push([cube, "fail"]); 
+      }
     }
 
     const textGeometry = new TextGeometry(breakLines(shuffled.question[i]), {
@@ -130,7 +144,7 @@ function makeRows(row, font, gap){
       textMesh.position.set((row+2)*gap - 0.5, i * 3 - 6.8, 0);
     }
       scene.add(textMesh);
-      cubeRow.push(textMesh);
+      cubeRow.push([textMesh, "text"]);
   }
   return cubeRow;
 }
@@ -159,6 +173,7 @@ function breakLines(text) {
 
 
 // Animation loop
+var overlap = false;
 const animate = () => {
   requestAnimationFrame(animate);
 
@@ -166,21 +181,25 @@ const animate = () => {
   // Update positions of moving cubes
   for (let row = 0; row < movingCubes.length; row++) {
     for (let i = 0; i < movingCubes[row].length; i++) {
-      movingCubes[row][i].position.x -= 0.06;
+      movingCubes[row][i][0].position.x -= 0.06;
 
-      // Check for collision with bird
-      const cube = movingCubes[row][i];
-      if (
-        cube.position.x - 0.5 < bird.position.x + 0.5 &&
-        cube.position.x + 0.5 > bird.position.x - 0.5 &&
-        cube.position.y - 0.05 < bird.position.y + 0.5 &&
-        cube.position.y + 0.05 > bird.position.y - 0.5 &&
-        cube.position.z - 0.05 < bird.position.z + 0.5 &&
-        cube.position.z + 0.05 > bird.position.z - 0.5
-      ) {
-        // Collision detected, game over logic
-        // console.log('Game Over!');
-      }
+
+      const cube = movingCubes[row][i][0];
+
+    const cubeBoundingBox = new THREE.Box3().setFromObject(cube);
+    const birdBoundingBox = new THREE.Box3().setFromObject(bird);
+
+    const collisionDetected = cubeBoundingBox.intersectsBox(birdBoundingBox);
+    if (collisionDetected && movingCubes[row][i][1] == "fail") {
+        // Handle collision
+        console.log("Collision detected between cube and bird!");
+        // Perform actions like stopping movement or removing objects
+    }
+          
+
+
+
+
 
       // Reset cube position if it moves out of the scene
       if (cube.position.x < -16) {
@@ -193,7 +212,7 @@ const animate = () => {
   velocity -= gravity; // Apply gravity
   bird.position.y += velocity; // Update bird's position based on velocity
 
-    bird.rotation.x += Math.random() * 0.01 - 0.03; // Random rotation around X-axis
+  bird.rotation.x += Math.random() * 0.01 - 0.03; // Random rotation around X-axis
   bird.rotation.y += Math.random() * 0.01 - 0.03; // Random rotation around Y-axis
   bird.rotation.z += Math.random() * 0.01 - 0.03; // Random rotation around Z-axis
 

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 const Home = ({setTitle}) => {
   setTitle("Edu Homepage");
+  console.log("Home!!!");
   return (
     <div className="home-page">
       <nav className="video-nav flex-div">

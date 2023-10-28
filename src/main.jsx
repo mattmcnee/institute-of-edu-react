@@ -7,7 +7,7 @@ const updateTitleString = (data) => {
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <App onTitleString={updateTitleString} />
-  </React.StrictMode>,
+  // </React.StrictMode>,
 )
