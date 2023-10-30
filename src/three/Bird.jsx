@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import * as THREE from 'three';
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 import { FontLoader } from 'three/addons/loaders/FontLoader.js';
+import { CSS2DRenderer } from 'three/addons/renderers/CSS2DRenderer.js';
 
 const Bird = ({setTitle}) => {
   setTitle("Edu Homepage");
@@ -105,6 +106,26 @@ window.addEventListener('keydown', function(event) {
         var bird = new THREE.Sprite(spriteMaterial);
         bird.scale.set(40, 40, 1); // Set the size of the sprite
         scene.add(bird);
+        resetBird()
+
+
+
+
+const css2DRenderer = new CSS2DRenderer();
+css2DRenderer.setSize(window.innerWidth, window.innerHeight);
+css2DRenderer.domElement.style.position = 'absolute';
+css2DRenderer.domElement.style.top = '0';
+document.body.appendChild(css2DRenderer.domElement);
+
+
+const div = document.createElement('div');
+div.className = 'label';
+div.textContent = 'Hello, 3D Text!';
+const label = new THREE.CSS2DObject(div);
+label.position.set(0, 1, 0); // Set the position of the text in 3D space
+scene.add(label);
+
+
         
 
 
@@ -192,29 +213,38 @@ function breakLines(text) {
 
 // Animation loop
 var overlap = false;
-const animate = () => {
+var lastTime = 0; // Variable to store the timestamp of the last frame
+
+const animate = (timestamp) => {
+  // Calculate the time elapsed since the last frame
+  const deltaTime = (timestamp - lastTime) * 0.06; // Convert to seconds
+  lastTime = timestamp; // Update the lastTime variable
+
   requestAnimationFrame(animate);
 
-    for (let row = 0; row < movingCubes.length; row++) {
+  // Update the positions of moving cubes based on deltaTime
+  for (let row = 0; row < movingCubes.length; row++) {
     for (let i = 0; i < movingCubes[row].length; i++) {
-      movingCubes[row][i][0].position.x -= 1;}}
+      movingCubes[row][i][0].position.x -= 1 * deltaTime; // Update position based on deltaTime
+    }
+  }
 
   // Apply gravity and velocity to the bird's position
   velocity -= gravity;
   bird.position.y += velocity;
   bird.material.rotation += Math.random() * 0.01 - 0.03;
 
+  console.log(bird.position.y)
+
   // Check for collision with ground
   if (bird.position.y < -6) {
     bird.position.y = -6;
     velocity = 0;
   }
+
   renderer.render(scene, camera);
-
-  };
-
+};
 animate();
-
 }
 
 

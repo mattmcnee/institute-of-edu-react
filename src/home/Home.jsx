@@ -38,9 +38,9 @@ const Home = ({setTitle}) => {
         <Link to="/bird">
           <button className="cta-button">View Bird Demo</button>
         </Link>
-
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/aDUvCLAp0uU" frameborder="0" allowfullscreen></iframe>
-
+        <Link to="/text">
+          <button className="cta-button">View Text Demo</button>
+        </Link>
       </div>
       <div className="featured-courses">
         <h2>Featured Courses</h2>
