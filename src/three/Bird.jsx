@@ -51,7 +51,7 @@ function runGame(){
   // Set up Three.js scene
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer();
+const renderer = new THREE.WebGLRenderer({ alpha: true });
 camera.position.z = 10;
 camera.position.y = 2;
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -69,12 +69,16 @@ window.addEventListener('resize', () => {
   camera.updateProjectionMatrix();
 });
 
+function resetBird(){
+  bird.position.y = 0;
+  bird.position.x = -6;
+}
+
 // Bird setup
 const birdGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
 const birdMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
 const bird = new THREE.Mesh(birdGeometry, birdMaterial);
-bird.position.y = 0;
-bird.position.x = -6;
+resetBird();
 scene.add(bird);
 
 // Game variables
@@ -91,27 +95,32 @@ window.addEventListener('keydown', function(event) {
 
 
 const fontLoader = new FontLoader();
-const textMaterial = new THREE.MeshBasicMaterial({ color: 0xcccccc });
+const textMaterial = new THREE.MeshBasicMaterial({ color: 0x555555 });
 
 // Load the Open Sans font
 const movingCubes = [];
-var unset = true;
+var fontHolder;
 fontLoader.load('src/three/helvetiker_bold.typeface.json', function (font) {
-  if(unset){
-    for (let row = 0; row < 8; row++) {
-      movingCubes.push(makeCol(row, font, 10));
+  fontHolder = font;
+  resetTowers();
+});
+
+function resetTowers(){
+  movingCubes.splice(0, movingCubes.length);
+
+  for (let row = 0; row < 8; row++) {
+      movingCubes.push(makeCol(row, fontHolder, 10));
     }
 
-    console.log(movingCubes);
-    unset = false;
-  }
-});
+  console.log(movingCubes);
+}
+
 
 function makeCol(row, font, gap){
   const cubeRow = [];
   const cubeGeometry = new THREE.BoxGeometry(0.5, 3, -0.1);
-  const cubePassMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 })
-  const cubeFailMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 })
+  const cubePassMaterial = new THREE.MeshBasicMaterial({ color: 0x222222 })
+  const cubeFailMaterial = new THREE.MeshBasicMaterial({ color: 0x222222 })
 
   const shuffled = shuffleAnswers(questions[row]);
 
@@ -195,7 +204,15 @@ const animate = () => {
     if (collisionDetected && movingCubes[row][i][1] == "fail") {
         // Handle collision
         console.log("Collision detected between cube and bird!");
-        // Perform actions like stopping movement or removing objects
+        for (let row = 0; row < movingCubes.length; row++) {
+          for (let i = 0; i < movingCubes[row].length; i++) {
+            const cube = movingCubes[row][i][0];
+            scene.remove(cube);
+          }
+        }
+
+        resetTowers();
+        resetBird();
     }
           
 
@@ -220,8 +237,8 @@ const animate = () => {
 
 
   // Check for collision with ground
-  if (bird.position.y < -5) {
-    bird.position.y = -5;
+  if (bird.position.y < -6) {
+    bird.position.y = -6;
     velocity = 0; // Reset velocity on ground collision
     // Game over logic
     // console.log('Game Over!');
