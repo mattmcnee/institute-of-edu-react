@@ -50,10 +50,15 @@ runGame();
 function runGame(){
   // Set up Three.js scene
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+var camera = new THREE.OrthographicCamera(
+    window.innerWidth / -2,   // Left
+    window.innerWidth / 2,    // Right
+    window.innerHeight / 2,   // Top
+    window.innerHeight / -2,  // Bottom
+    -1,                       // Near
+    100                         // Far
+);
 const renderer = new THREE.WebGLRenderer({ alpha: true });
-camera.position.z = 10;
-camera.position.y = 2;
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
 document.getElementById('flappy-bird-container').appendChild(renderer.domElement);
@@ -62,9 +67,17 @@ document.getElementById('flappy-bird-container').appendChild(renderer.domElement
 window.addEventListener('resize', () => {
   const newWidth = window.innerWidth;
   const newHeight = window.innerHeight;
+
   // Update renderer size
   renderer.setSize(newWidth, newHeight);
-  // Update camera aspect ratio
+
+  // Update camera's left, right, top, and bottom values to match the initial setup
+  camera.left = newWidth / -2;
+  camera.right = newWidth / 2;
+  camera.top = newHeight / 2;
+  camera.bottom = newHeight / -2;
+
+  // Update camera aspect ratio and projection matrix
   camera.aspect = newWidth / newHeight;
   camera.updateProjectionMatrix();
 });
@@ -74,17 +87,10 @@ function resetBird(){
   bird.position.x = -6;
 }
 
-// Bird setup
-const birdGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-const birdMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-const bird = new THREE.Mesh(birdGeometry, birdMaterial);
-resetBird();
-scene.add(bird);
-
 // Game variables
-let gravity = 0.0018; // Adjust gravity for smoother motion
+let gravity = 0.18; // Adjust gravity for smoother motion
 let velocity = 0;
-let jumpStrength = 0.09; // Adjust jump strength for smoother jumping
+let jumpStrength = 9; // Adjust jump strength for smoother jumping
 
 // Handle user input
 window.addEventListener('keydown', function(event) {
@@ -92,6 +98,14 @@ window.addEventListener('keydown', function(event) {
     velocity = jumpStrength; // Apply jump strength when spacebar is pressed
   }
 });
+
+
+
+        var spriteMaterial = new THREE.SpriteMaterial({ color: 0x32a852 });
+        var bird = new THREE.Sprite(spriteMaterial);
+        bird.scale.set(40, 40, 1); // Set the size of the sprite
+        scene.add(bird);
+        
 
 
 const fontLoader = new FontLoader();
@@ -109,7 +123,7 @@ function resetTowers(){
   movingCubes.splice(0, movingCubes.length);
 
   for (let row = 0; row < 8; row++) {
-      movingCubes.push(makeCol(row, fontHolder, 10));
+      movingCubes.push(makeCol(row, fontHolder, 60));
     }
 
   console.log(movingCubes);
@@ -118,41 +132,34 @@ function resetTowers(){
 
 function makeCol(row, font, gap){
   const cubeRow = [];
-  const cubeGeometry = new THREE.BoxGeometry(0.5, 3, -0.1);
-  const cubePassMaterial = new THREE.MeshBasicMaterial({ color: 0x222222 })
-  const cubeFailMaterial = new THREE.MeshBasicMaterial({ color: 0x222222 })
+  var cubeMaterial = new THREE.SpriteMaterial({ color: 0x32a89e });
 
   const shuffled = shuffleAnswers(questions[row]);
 
   for (let i = 0; i < 5; i++) {
     if(i!=0){
-
+      const cube = new THREE.Sprite(cubeMaterial);
+      cube.scale.set(5, 30, 1);
+      cube.position.set((row+2)*gap*5, i * 30, 0);
+      scene.add(cube);
       if (shuffled.question[i] == shuffled.answer){
-        const cubeMaterial = cubePassMaterial;
-        const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-        cube.position.set((row+2)*gap, i * 3 - 6.5, 0);
-        scene.add(cube);
         cubeRow.push([cube, "pass"]);  
       }else{
-        const cubeMaterial = cubeFailMaterial;
-        const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-        cube.position.set((row+2)*gap, i * 3 - 6.5, 0);
-        scene.add(cube);
         cubeRow.push([cube, "fail"]); 
       }
     }
 
     const textGeometry = new TextGeometry(breakLines(shuffled.question[i]), {
         font: font,
-        size: (i === 0) ? 0.3 : 0.5,
+        size: (i === 0) ? 12 : 20,
         height: 0.001,
     });
 
     const textMesh = new THREE.Mesh(textGeometry, textMaterial);
     if(i == 0){
-      textMesh.position.set((row+2)*gap - 6.5, 0.9, 0);
+      textMesh.position.set((row+2)*gap*5 - 230, 70, 0);
     }else{
-      textMesh.position.set((row+2)*gap - 0.5, i * 3 - 6.8, 0);
+      textMesh.position.set((row+2)*gap*5 + 5, i * 30 - 6.8, 0);
     }
       scene.add(textMesh);
       cubeRow.push([textMesh, "text"]);
@@ -188,62 +195,20 @@ var overlap = false;
 const animate = () => {
   requestAnimationFrame(animate);
 
-
-  // Update positions of moving cubes
-  for (let row = 0; row < movingCubes.length; row++) {
+    for (let row = 0; row < movingCubes.length; row++) {
     for (let i = 0; i < movingCubes[row].length; i++) {
-      movingCubes[row][i][0].position.x -= 0.06;
-
-
-      const cube = movingCubes[row][i][0];
-
-    const cubeBoundingBox = new THREE.Box3().setFromObject(cube);
-    const birdBoundingBox = new THREE.Box3().setFromObject(bird);
-
-    const collisionDetected = cubeBoundingBox.intersectsBox(birdBoundingBox);
-    if (collisionDetected && movingCubes[row][i][1] == "fail") {
-        // Handle collision
-        console.log("Collision detected between cube and bird!");
-        for (let row = 0; row < movingCubes.length; row++) {
-          for (let i = 0; i < movingCubes[row].length; i++) {
-            const cube = movingCubes[row][i][0];
-            scene.remove(cube);
-          }
-        }
-
-        resetTowers();
-        resetBird();
-    }
-          
-
-
-
-
-
-      // Reset cube position if it moves out of the scene
-      if (cube.position.x < -16) {
-        scene.remove(cube);
-      }
-    }
-  }
+      movingCubes[row][i][0].position.x -= 1;}}
 
   // Apply gravity and velocity to the bird's position
-  velocity -= gravity; // Apply gravity
-  bird.position.y += velocity; // Update bird's position based on velocity
-
-  bird.rotation.x += Math.random() * 0.01 - 0.03; // Random rotation around X-axis
-  bird.rotation.y += Math.random() * 0.01 - 0.03; // Random rotation around Y-axis
-  bird.rotation.z += Math.random() * 0.01 - 0.03; // Random rotation around Z-axis
-
+  velocity -= gravity;
+  bird.position.y += velocity;
+  bird.material.rotation += Math.random() * 0.01 - 0.03;
 
   // Check for collision with ground
   if (bird.position.y < -6) {
     bird.position.y = -6;
-    velocity = 0; // Reset velocity on ground collision
-    // Game over logic
-    // console.log('Game Over!');
+    velocity = 0;
   }
-
   renderer.render(scene, camera);
 
   };
