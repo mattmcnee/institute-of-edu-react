@@ -111,19 +111,19 @@ window.addEventListener('keydown', function(event) {
 
 
 
-const css2DRenderer = new CSS2DRenderer();
-css2DRenderer.setSize(window.innerWidth, window.innerHeight);
-css2DRenderer.domElement.style.position = 'absolute';
-css2DRenderer.domElement.style.top = '0';
-document.body.appendChild(css2DRenderer.domElement);
+// const css2DRenderer = new CSS2DRenderer();
+// css2DRenderer.setSize(window.innerWidth, window.innerHeight);
+// css2DRenderer.domElement.style.position = 'absolute';
+// css2DRenderer.domElement.style.top = '0';
+// document.body.appendChild(css2DRenderer.domElement);
 
 
-const div = document.createElement('div');
-div.className = 'label';
-div.textContent = 'Hello, 3D Text!';
-const label = new THREE.CSS2DObject(div);
-label.position.set(0, 1, 0); // Set the position of the text in 3D space
-scene.add(label);
+// const div = document.createElement('div');
+// div.className = 'label';
+// div.textContent = 'Hello, 3D Text!';
+// const label = new THREE.CSS2DObject(div);
+// label.position.set(0, 1, 0); // Set the position of the text in 3D space
+// scene.add(label);
 
 
         

@@ -21,6 +21,25 @@ const Text = ({setTitle}) => {
     {"question": ["Calculate the perimeter of a square with side length 10", "40", "36", "44", "38"]}
   ]
 
+      function cleanup(questionsArray, scene, container){
+
+      // Remove objects from the scene
+        if(questionsArray){
+      for (let j = 0; j < questionsArray.length; j++) {
+        questionsArray[j][0].forEach(sprite => scene.remove(sprite));
+      }
+    }
+
+       // Clear DOM elements
+    if(container){
+
+      const elementsToRemove = container.getElementsByClassName('label');
+      while (elementsToRemove.length > 0) {
+        elementsToRemove[0].parentNode.removeChild(elementsToRemove[0]);
+      }
+    }
+    }
+
 
 
 
@@ -65,7 +84,10 @@ const Text = ({setTitle}) => {
     window.addEventListener('keydown', function(event) {
       if (event.code === 'Space') {
         velocity = jumpStrength; // Apply jump strength when spacebar is pressed
+        playing = true;
       }
+
+
     });
 
     var questionsArray = [];
@@ -117,31 +139,24 @@ const Text = ({setTitle}) => {
 
 
     var bird;
-    var resetting = false;
-    function reset(){
-      resetting = true;
-      for (var j = 0; j < questionsArray.length; j++) {
-        for (var i = 0; i < questionsArray[j][0].length; i++) {
-          scene.remove(questionsArray[j][0][i]);
-        }
-      }
+    var playing = false;
+function reset() {
+  playing = false;
+  cleanup(questionsArray, scene, container);
 
-      const elementsToRemove = container.getElementsByClassName('label');
+  // Reset questionsArray by generating new question blocks
+  questionsArray = [];
+  for (let i = 0; i < 1; i++) {
+    createQuestionBlock(questions[i], (i + 1) * 2);
+  }
 
-      while (elementsToRemove.length > 0) {
-          elementsToRemove[0].parentNode.removeChild(elementsToRemove[0]);
-      }
+  // Reset bird's position and velocity
+  bird.position.set(-0.5, 0, 0);
+  velocity = 0;
+}
 
 
-      questionsArray = [];
-      for (let i=0; i<questions.length; i++){
-        createQuestionBlock(questions[i], (i+1)*2);     
-      }
 
-      bird.position.set(-0.5, 0, 0);
-      velocity = 0;
-      resetting = false;
-    }
 
 
 
@@ -182,7 +197,7 @@ const Text = ({setTitle}) => {
     function animate() {
       requestAnimationFrame(animate);
 
-      if(!resetting){
+      if(playing){
 
         velocity -= gravity;
         bird.position.y += velocity;
@@ -219,8 +234,11 @@ const Text = ({setTitle}) => {
 
   }
   useEffect(() => {
+    let scene, camera, renderer, questionsArray, bird, playing, container;
     createRender();
     return () => {
+      cleanup(questionsArray, scene, container);
+      playing = false;
     };
   }, []);
 
