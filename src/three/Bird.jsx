@@ -1,11 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 import { FontLoader } from 'three/addons/loaders/FontLoader.js';
-import { CSS2DRenderer } from 'three/addons/renderers/CSS2DRenderer.js';
 
 const Bird = ({setTitle}) => {
   setTitle("Edu Homepage");
+  const canvasRef = useRef();
+  const flappyBirdContainerRef = useRef(null);
   useEffect(() => {
 
 
@@ -40,7 +41,8 @@ function shuffleAnswers(questionObj) {
   shuffleAnswers.push(...answers);
     
     return {
-        question: shuffleAnswers,
+        question: question,
+        answers: shuffleAnswers,
         answer: correctAnswer
     };
 }
@@ -50,48 +52,50 @@ runGame();
 
 function runGame(){
   // Set up Three.js scene
-const scene = new THREE.Scene();
-var camera = new THREE.OrthographicCamera(
-    window.innerWidth / -2,   // Left
-    window.innerWidth / 2,    // Right
-    window.innerHeight / 2,   // Top
-    window.innerHeight / -2,  // Bottom
-    -1,                       // Near
-    100                         // Far
-);
-const renderer = new THREE.WebGLRenderer({ alpha: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(window.devicePixelRatio);
-document.getElementById('flappy-bird-container').appendChild(renderer.domElement);
+    var scene = new THREE.Scene();
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+    var aspectRatio = width / height;
+    var camera = new THREE.OrthographicCamera(-aspectRatio, aspectRatio, 1, -1, 1, 1000);
+    camera.position.z = 2;
+    var renderer = new THREE.WebGLRenderer({ alpha: true, canvas: canvasRef.current  });
+    renderer.setSize(width, height);
+    const flappyBirdContainer = flappyBirdContainerRef.current;
+    flappyBirdContainer.appendChild(renderer.domElement);
 
 
-window.addEventListener('resize', () => {
-  const newWidth = window.innerWidth;
-  const newHeight = window.innerHeight;
+    // Update camera and renderer on screen resize
+    window.addEventListener('resize', () => {
+      const newWidth = window.innerWidth;
+      const newHeight = window.innerHeight;
 
-  // Update renderer size
-  renderer.setSize(newWidth, newHeight);
+      renderer.setSize(newWidth, newHeight);
+      var aspectRatio = newWidth / newHeight;
 
-  // Update camera's left, right, top, and bottom values to match the initial setup
-  camera.left = newWidth / -2;
-  camera.right = newWidth / 2;
-  camera.top = newHeight / 2;
-  camera.bottom = newHeight / -2;
+      camera.left = -aspectRatio;
+      camera.right = aspectRatio;
+      camera.top = 1;
+      camera.bottom = -1;
 
-  // Update camera aspect ratio and projection matrix
-  camera.aspect = newWidth / newHeight;
-  camera.updateProjectionMatrix();
-});
+      camera.aspect = newWidth / newHeight;
+      camera.updateProjectionMatrix();
+    });
 
 function resetBird(){
   bird.position.y = 0;
-  bird.position.x = -6;
+  bird.position.x = 0;
 }
 
+// Bird setup
+var spriteMaterial = new THREE.SpriteMaterial({ color: 0x32a852 });
+const bird = new THREE.Sprite(spriteMaterial);
+bird.scale.set(0.1, 0.1, 1);
+scene.add(bird);
+
 // Game variables
-let gravity = 0.18; // Adjust gravity for smoother motion
+let gravity = 0.00036; 
 let velocity = 0;
-let jumpStrength = 9; // Adjust jump strength for smoother jumping
+let jumpStrength = 0.018;
 
 // Handle user input
 window.addEventListener('keydown', function(event) {
@@ -99,34 +103,6 @@ window.addEventListener('keydown', function(event) {
     velocity = jumpStrength; // Apply jump strength when spacebar is pressed
   }
 });
-
-
-
-        var spriteMaterial = new THREE.SpriteMaterial({ color: 0x32a852 });
-        var bird = new THREE.Sprite(spriteMaterial);
-        bird.scale.set(40, 40, 1); // Set the size of the sprite
-        scene.add(bird);
-        resetBird()
-
-
-
-
-// const css2DRenderer = new CSS2DRenderer();
-// css2DRenderer.setSize(window.innerWidth, window.innerHeight);
-// css2DRenderer.domElement.style.position = 'absolute';
-// css2DRenderer.domElement.style.top = '0';
-// document.body.appendChild(css2DRenderer.domElement);
-
-
-// const div = document.createElement('div');
-// div.className = 'label';
-// div.textContent = 'Hello, 3D Text!';
-// const label = new THREE.CSS2DObject(div);
-// label.position.set(0, 1, 0); // Set the position of the text in 3D space
-// scene.add(label);
-
-
-        
 
 
 const fontLoader = new FontLoader();
@@ -144,49 +120,71 @@ function resetTowers(){
   movingCubes.splice(0, movingCubes.length);
 
   for (let row = 0; row < 8; row++) {
-      movingCubes.push(makeCol(row, fontHolder, 60));
-    }
+    movingCubes.push(makeCol(row, fontHolder, 2));
+  }
 
   console.log(movingCubes);
 }
 
 
+const container = document.getElementById('flappy-bird-container');
 function makeCol(row, font, gap){
   const cubeRow = [];
-  var cubeMaterial = new THREE.SpriteMaterial({ color: 0x32a89e });
+  const cubeGeometry = new THREE.BoxGeometry(0.5, 3, -0.1);
+  const cubePassMaterial = new THREE.MeshBasicMaterial({ color: 0x222222 })
+  const cubeFailMaterial = new THREE.MeshBasicMaterial({ color: 0x222222 })
+  var spriteMaterial = new THREE.SpriteMaterial({ color: 0x32a89e });
+  var clearMaterial = new THREE.SpriteMaterial({ color: 0xffffff, transparent: true, opacity: 0});
 
   const shuffled = shuffleAnswers(questions[row]);
 
   for (let i = 0; i < 5; i++) {
-    if(i!=0){
-      const cube = new THREE.Sprite(cubeMaterial);
-      cube.scale.set(5, 30, 1);
-      cube.position.set((row+2)*gap*5, i * 30, 0);
-      scene.add(cube);
-      if (shuffled.question[i] == shuffled.answer){
-        cubeRow.push([cube, "pass"]);  
+
+    const labelDiv = document.createElement('div');
+    labelDiv.className = 'label';
+    labelDiv.textContent = (i === 0) ?  shuffled.question: shuffled.answers[i];
+    container.appendChild(labelDiv);
+
+    if(i==0){
+        var sprite = new THREE.Sprite(clearMaterial.clone());
+        sprite.scale.set(0.2, 0.5, 1);
+        sprite.position.setY(0);
+        sprite.position.setX((row+2)*gap -1);
+        scene.add(sprite);
+        cubeRow.push([sprite, "text", labelDiv]); 
+
+    }else{
+        var sprite = new THREE.Sprite((shuffled.answers[i] == shuffled.answer) ?  clearMaterial.clone(): spriteMaterial.clone());
+        sprite.scale.set(0.2, 0.5, 1);
+        sprite.position.setY(-0.75 + 0.5 * (i-1));
+        sprite.position.setX((row+2)*gap);
+        scene.add(sprite);
+      if (shuffled.answers[i] == shuffled.answer){
+        cubeRow.push([sprite, "pass", labelDiv]);  
       }else{
-        cubeRow.push([cube, "fail"]); 
+        cubeRow.push([sprite, "fail", labelDiv]); 
       }
     }
-
-    const textGeometry = new TextGeometry(breakLines(shuffled.question[i]), {
-        font: font,
-        size: (i === 0) ? 12 : 20,
-        height: 0.001,
-    });
-
-    const textMesh = new THREE.Mesh(textGeometry, textMaterial);
-    if(i == 0){
-      textMesh.position.set((row+2)*gap*5 - 230, 70, 0);
-    }else{
-      textMesh.position.set((row+2)*gap*5 + 5, i * 30 - 6.8, 0);
-    }
-      scene.add(textMesh);
-      cubeRow.push([textMesh, "text"]);
   }
   return cubeRow;
 }
+
+
+    function alignHtmlText(sprite, label){
+      const position = sprite.position.clone().project(camera);
+      const x = (position.x + 1) * window.innerWidth / 2 - label.offsetWidth / 2;
+      const y = -(position.y - 1) * window.innerHeight / 2 - label.offsetHeight / 2;
+      const errorMargin = 1.2;
+      const isInsideScreen = position.x >= -errorMargin && position.x <= errorMargin && position.y >= -errorMargin && position.y <= errorMargin;
+
+      // Apply the calculated position to the HTML element and show/hide it based on visibility
+      if (isInsideScreen) {
+        label.style.transform = `translate(${x}px, ${y}px)`;
+        label.style.display = 'block';
+      } else {
+        label.style.display = 'none';
+      }
+    }
 
 
 function breakLines(text) {
@@ -213,38 +211,71 @@ function breakLines(text) {
 
 // Animation loop
 var overlap = false;
-var lastTime = 0; // Variable to store the timestamp of the last frame
-
-const animate = (timestamp) => {
-  // Calculate the time elapsed since the last frame
-  const deltaTime = (timestamp - lastTime) * 0.06; // Convert to seconds
-  lastTime = timestamp; // Update the lastTime variable
-
+const animate = () => {
   requestAnimationFrame(animate);
 
-  // Update the positions of moving cubes based on deltaTime
+
+  // Update positions of moving cubes
   for (let row = 0; row < movingCubes.length; row++) {
     for (let i = 0; i < movingCubes[row].length; i++) {
-      movingCubes[row][i][0].position.x -= 1 * deltaTime; // Update position based on deltaTime
+      movingCubes[row][i][0].position.x -= 0.01;
+
+      alignHtmlText(movingCubes[row][i][0], movingCubes[row][i][2]);
+
+
+      const cube = movingCubes[row][i][0];
+
+    const cubeBoundingBox = new THREE.Box3().setFromObject(cube);
+    const birdBoundingBox = new THREE.Box3().setFromObject(bird);
+
+    const collisionDetected = cubeBoundingBox.intersectsBox(birdBoundingBox);
+    if (collisionDetected && movingCubes[row][i][1] == "fail") {
+        // Handle collision
+        console.log("Collision detected between cube and bird!");
+        for (let row = 0; row < movingCubes.length; row++) {
+          for (let i = 0; i < movingCubes[row].length; i++) {
+            const cube = movingCubes[row][i][0];
+            scene.remove(cube);
+            console.log(movingCubes[row][i][2])
+            movingCubes[row][i][2].parentNode.removeChild(movingCubes[row][i][2]);
+          }
+        }
+
+        resetTowers();
+        resetBird();
+    }
+          
+
+
+
+
+
+      // Reset cube position if it moves out of the scene
+      if (cube.position.x < -16) {
+        scene.remove(cube);
+      }
     }
   }
 
   // Apply gravity and velocity to the bird's position
-  velocity -= gravity;
-  bird.position.y += velocity;
-  bird.material.rotation += Math.random() * 0.01 - 0.03;
+  velocity -= gravity; // Apply gravity
+  bird.position.y += velocity; // Update bird's position based on velocity
 
-  console.log(bird.position.y)
 
   // Check for collision with ground
   if (bird.position.y < -6) {
     bird.position.y = -6;
-    velocity = 0;
+    velocity = 0; // Reset velocity on ground collision
+    // Game over logic
+    // console.log('Game Over!');
   }
 
   renderer.render(scene, camera);
-};
+
+  };
+
 animate();
+
 }
 
 
@@ -255,7 +286,7 @@ animate();
     };
   }, []);
 
-  return <div id="flappy-bird-container" />;
+  return <div id="flappy-bird-container" ref={flappyBirdContainerRef}></div>;
 };
 
 export default Bird;
