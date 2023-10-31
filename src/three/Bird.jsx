@@ -145,7 +145,7 @@ function makeCol(row, gap){
       sprite.position.setX((row+2)*gap -1);
       spriteType = "text";
     }else{
-      var sprite = new THREE.Sprite((shuffled.answers[i] == shuffled.answer) ?  clearMaterial.clone(): spriteMaterial.clone());
+      var sprite = new THREE.Sprite(spriteMaterial.clone());
       sprite.scale.set(0.2, 0.5, 1);
       sprite.position.setY(-0.75 + 0.5 * (i-1));
       sprite.position.setX((row+2)*gap);
@@ -198,31 +198,30 @@ resetTowers();
 const animate = () => {
   requestAnimationFrame(animate);
 
-
   // Update positions of moving cubes
-  for (let row = 0; row < movingCubes.length; row++) {
-    for (let i = 0; i < ((movingCubes[row].length == 5) ?  5: 0); i++) {
-      movingCubes[row][i].cube.position.x -= 0.01;
+  for (let col = 0; col < movingCubes.length; col++) {
+    for (let row = 0; row < ((movingCubes[col].length == 5) ?  5: 0); row++) {
+      movingCubes[col][row].cube.position.x -= 0.01;
 
-      alignHtmlText(movingCubes[row][i].cube, movingCubes[row][i].label);
+      alignHtmlText(movingCubes[col][row].cube, movingCubes[col][row].label);
 
 
-      const cube = movingCubes[row][i].cube;
+      const cube = movingCubes[col][row].cube;
           
       // Reset cube position if it moves out of the scene
       if (cube.position.x < -16) {
         scene.remove(cube);
       }
 
-      if(!movingCubes[row][i].passed && movingCubes[row][i].type == "pass" && cube.position.x < bird.position.x){
-        var lowerBound = 0.5 * i - 1.5;
-        var upperBound = 0.5 * (i+1) -1.5;
+      if(!movingCubes[col][row].passed && movingCubes[col][row].type == "pass" && cube.position.x < bird.position.x){
+        var lowerBound = 0.5 * row - 1.5;
+        var upperBound = 0.5 * (row+1) -1.5;
           if(!(bird.position.y > lowerBound && bird.position.y < upperBound)){
             handleCollsion();
             resetTowers();
             resetBird();
           }
-          movingCubes[row][i].passed = true;
+          movingCubes[col][row].passed = true;
       }
     }
   }
