@@ -1,10 +1,10 @@
 import React from 'react';
-import Bird from '/src/three/Bird';
+import Game from '/src/three/Game';
 
 const Worksheet = ({setTitle}) => {
-  setTitle("Edu Homepage");
+  setTitle("Game Worksheet");
   const updateTitleString = (data) => {
-    setTitle("Edu Homepage");
+    return;
   }
   console.log("Home!!!");
   return (
@@ -34,7 +34,7 @@ const Worksheet = ({setTitle}) => {
         <div className="worksheet-section">
           <div className="game-container">
             <div className="game-window">
-              <Bird setTitle={updateTitleString}/>
+              <Game setTitle={updateTitleString}/>
             </div>
           </div>
         </div>

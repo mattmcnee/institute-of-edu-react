@@ -325,10 +325,23 @@ cursor: pointer;
   border-radius: 10px;
 }
 
-#flappy-bird-container{
+#main-game-container{
   width: 100%;
   height: 100%;
+  overflow: hidden;
+  position: relative;
 }
 
+.label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 8px;
+    border-radius: 4px;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    box-sizing: border-box;
+}
 
 
