@@ -22,6 +22,15 @@ function shuffleAnswers(questionObj) {
     };
 }
 
+function shuffleQuestions(questions) {
+  let shuffledQuestions = questions.slice(); // Create a shallow copy of the original array
+  for (let i = shuffledQuestions.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1)); // Generate a random index
+    [shuffledQuestions[i], shuffledQuestions[j]] = [shuffledQuestions[j], shuffledQuestions[i]]; // Swap elements
+  }
+  return shuffledQuestions;
+}
+
 // Positions a div at the location of a cube rendered in
 // orthographic camera, matching the height and width
 function fitLabelToBox(box, label, gameContainer, camera){
@@ -43,7 +52,7 @@ function fitLabelToBox(box, label, gameContainer, camera){
   // Apply the calculated position to the HTML element and show/hide it based on visibility
   if (isInsideScreen) {
     label.style.transform = `translate(${x}px, ${y}px)`;
-    label.style.display = 'block';
+    label.style.display = 'flex';
   } else {
     label.style.display = 'none';
   }
@@ -65,11 +74,15 @@ export function flappyBird(scene, camera, renderer, gameContainer, questions) {
   var movingCubes = [];
   let paused = true;
 
+  var shuffledQuestions = shuffleQuestions(questions);
+
   const scoreDiv = document.createElement('div');
   scoreDiv.className = 'label';
-  scoreDiv.textContent = "Press space to begin";
+  const miniScoreDiv = document.createElement('div');
+  miniScoreDiv.textContent = "Press space to begin";
   scoreDiv.style.display = 'block';
   scoreDiv.style.transform = `translate(10px, 10px)`;
+  scoreDiv.appendChild(miniScoreDiv);
   gameContainer.appendChild(scoreDiv);
 
   function resetBird(){
@@ -93,7 +106,7 @@ export function flappyBird(scene, camera, renderer, gameContainer, questions) {
       event.preventDefault();
       velocity = jumpStrength; 
       if(paused){
-        scoreDiv.textContent = "0";
+         miniScoreDiv.textContent = "0";
         paused = false;
       }
     }
@@ -104,7 +117,7 @@ export function flappyBird(scene, camera, renderer, gameContainer, questions) {
     movingCubes.splice(0, movingCubes.length);
 
     for (let row = 0; row < questions.length; row++) {
-      movingCubes.push(makeCol(row, 2));
+      movingCubes.push(makeCol(row, 2.5));
     }
 
     console.log(movingCubes);
@@ -116,27 +129,29 @@ export function flappyBird(scene, camera, renderer, gameContainer, questions) {
     var spriteMaterial = new THREE.SpriteMaterial({ color: 0x32a89e });
     var clearMaterial = new THREE.SpriteMaterial({ color: 0xffffff, transparent: true, opacity: 0});
 
-    const shuffled = shuffleAnswers(questions[row]);
+    const shuffled = shuffleAnswers(shuffledQuestions[row]);
     var xOffset = Math.round(row + 2)*gap;
 
     for (let i = 0; i < 5; i++) {
 
       const labelDiv = document.createElement('div');
       labelDiv.className = 'label';
-      labelDiv.textContent = (i === 0) ?  shuffled.question: shuffled.answers[i];
+      const babylabel = document.createElement('div');
+      babylabel.textContent = (i === 0) ?  shuffled.question: shuffled.answers[i];
+      labelDiv.appendChild(babylabel);
       labelDiv.style.display = 'none';
       gameContainer.appendChild(labelDiv);
       var spriteType;
 
       if(i==0){
-        var sprite = new THREE.Sprite(spriteMaterial.clone());
+        var sprite = new THREE.Sprite(clearMaterial.clone());
         sprite.scale.set(1.2, 0.5, 1);
         sprite.position.setY(0);
         sprite.position.setX(xOffset -1);
         spriteType = "text";
       }else{
-        var sprite = new THREE.Sprite(spriteMaterial.clone());
-        sprite.scale.set(0.2, 0.5, 1);
+        var sprite = new THREE.Sprite(clearMaterial.clone());
+        sprite.scale.set(0.5, 0.5, 1);
         sprite.position.setY(-0.75 + 0.5 * (i-1));
         sprite.position.setX(xOffset);
         spriteType = (shuffled.answers[i] == shuffled.answer) ?  "pass": "fail";
@@ -199,7 +214,7 @@ export function flappyBird(scene, camera, renderer, gameContainer, questions) {
               handleCollsion();
             }else{
               score+=1;
-              scoreDiv.textContent = score;
+               miniScoreDiv.textContent = score;
             }
             movingCubes[col][row].passed = true;
         }

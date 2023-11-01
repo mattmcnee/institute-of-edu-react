@@ -28,7 +28,39 @@ const Worksheet = ({setTitle}) => {
       </nav>
       <div className="worksheet-conatiner">
         <div className="worksheet-section">
-          <h2>Probability</h2>
+          <h2>Definition of Independent Events</h2>
+        </div>
+
+        <div className="worksheet-section">
+          <p>Two events, A and B, are considered independent if the occurrence (or non-occurrence) of one event does not affect the probability of the other event happening. Mathematically, events A and B are independent if and only if the probability of their intersection is equal to the product of their individual probabilities</p>
+        </div>
+
+        <div className="worksheet-section">
+          <p>P(A∩B)=P(A)×P(B)</p>
+        </div>
+
+        <div className="worksheet-section">
+          <h2>Multiplication Rule for Independent Events</h2>
+        </div>
+
+        <div className="worksheet-section">
+          <p>The multiplication rule for independent events states that the probability of the intersection of two or more independent events is the product of their individual probabilities. For a sequence of independent events A, B, C, ..., the probability of all these events occurring together is given by:</p>
+        </div>
+
+        <div className="worksheet-section">
+          <p>P(A∩B∩C∩…)=P(A)×P(B)×P(C)×…</p>
+        </div>
+
+        <div className="worksheet-section">
+          <h2>Conclusion</h2>
+        </div>
+
+        <div className="worksheet-section">
+          <p>Understanding the concept of independent events and their probabilities is crucial in various fields such as statistics, finance, and engineering. It allows for accurate predictions and modeling of real-world scenarios where events occur independently of each other. By applying the multiplication rule for independent events, one can calculate the likelihood of complex outcomes, making it a powerful tool in probability theory.</p>
+        </div>
+
+        <div className="worksheet-section">
+          <h2>Test your knowledge</h2>
         </div>
 
         <div className="worksheet-section">
@@ -37,10 +69,6 @@ const Worksheet = ({setTitle}) => {
               <Game setTitle={updateTitleString}/>
             </div>
           </div>
-        </div>
-
-        <div className="worksheet-section">
-          <p>Probability is a fundamental concept in mathematics and statistics, representing the likelihood of an event occurring. It is expressed as a number between 0 and 1, where 0 indicates impossibility and 1 indicates certainty. In the context of probability theory, various formulas and methods are used to calculate probabilities, enabling us to make predictions and decisions in uncertain situations. Understanding probability is essential in fields such as statistics, finance, science, and everyday decision-making, as it helps assess risks, make informed choices, and interpret random events. Whether it's calculating the probability of rolling a specific number on a six-sided die or predicting the likelihood of a particular outcome in complex real-world scenarios, the concept of probability plays a crucial role in shaping our understanding of uncertainty and randomness.</p>
         </div>
 
 
