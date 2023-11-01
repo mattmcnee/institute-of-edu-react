@@ -128,6 +128,7 @@ function makeCol(row, gap){
   var clearMaterial = new THREE.SpriteMaterial({ color: 0xffffff, transparent: true, opacity: 0});
 
   const shuffled = shuffleAnswers(questions[row]);
+  var xOffset = Math.round(row + 2)*gap;
 
   for (let i = 0; i < 5; i++) {
 
@@ -142,13 +143,13 @@ function makeCol(row, gap){
       var sprite = new THREE.Sprite(clearMaterial.clone());
       sprite.scale.set(0.2, 0.5, 1);
       sprite.position.setY(0);
-      sprite.position.setX((row+2)*gap -1);
+      sprite.position.setX(xOffset -1);
       spriteType = "text";
     }else{
       var sprite = new THREE.Sprite(spriteMaterial.clone());
       sprite.scale.set(0.2, 0.5, 1);
       sprite.position.setY(-0.75 + 0.5 * (i-1));
-      sprite.position.setX((row+2)*gap);
+      sprite.position.setX(xOffset);
       spriteType = (shuffled.answers[i] == shuffled.answer) ?  "pass": "fail";
     }
     scene.add(sprite);
@@ -200,7 +201,7 @@ const animate = () => {
 
   // Update positions of moving cubes
   for (let col = 0; col < movingCubes.length; col++) {
-    for (let row = 0; row < ((movingCubes[col].length == 5) ?  5: 0); row++) {
+    for (let row = 0; row < movingCubes[col].length; row++) {
       movingCubes[col][row].cube.position.x -= 0.01;
 
       alignHtmlText(movingCubes[col][row].cube, movingCubes[col][row].label);
