@@ -25,10 +25,10 @@ const Bird = ({setTitle}) => {
     {"question": ["Calculate the perimeter of a square with side length 10", "40", "36", "44", "38"]}
 ]
 
-    // Very disgusting solution to hide double render of labels in react strict mode
+    // Iffy solution to stop double render of game in react strict mode
     var opacity = 1;
-    if(begun == true){
-      opacity = 0;
+    if(!begun == true){
+      runGame();
     }
     begun = true;
 
@@ -53,48 +53,50 @@ function shuffleAnswers(questionObj) {
         answer: correctAnswer
     };
 }
-runGame();
+
 
 function runGame(){
   // Set up Three.js scene
+  const flappyBirdContainer = flappyBirdContainerRef.current;
   var scene = new THREE.Scene();
-  var width = window.innerWidth;
-  var height = window.innerHeight;
+  var width = flappyBirdContainer.clientWidth;
+  var height = flappyBirdContainer.clientHeight;
+  console.log(width);
   var aspectRatio = width / height;
   var camera = new THREE.OrthographicCamera(-aspectRatio, aspectRatio, 1, -1, 1, 1000);
   camera.position.z = 2;
   var renderer = new THREE.WebGLRenderer({ alpha: true, canvas: canvasRef.current  });
   renderer.setSize(width, height);
-  const flappyBirdContainer = flappyBirdContainerRef.current;
   flappyBirdContainer.appendChild(renderer.domElement);
 
 
   // Update camera and renderer on screen resize
   window.addEventListener('resize', () => {
-    const newWidth = window.innerWidth;
-    const newHeight = window.innerHeight;
+  var width = flappyBirdContainer.clientWidth;
+  var height = flappyBirdContainer.clientHeight;
 
-    renderer.setSize(newWidth, newHeight);
-    var aspectRatio = newWidth / newHeight;
+    renderer.setSize(width, height);
+    var aspectRatio = width / height;
 
     camera.left = -aspectRatio;
     camera.right = aspectRatio;
     camera.top = 1;
     camera.bottom = -1;
 
-    camera.aspect = newWidth / newHeight;
+    camera.aspect = width / height;
     camera.updateProjectionMatrix();
   });
 
   function resetBird(){
     bird.position.y = 0;
-    bird.position.x = 0;
+    bird.position.x = -0.7;
   }
 
   // Bird setup
   var spriteMaterial = new THREE.SpriteMaterial({ color: 0x32a852 });
   const bird = new THREE.Sprite(spriteMaterial);
   bird.scale.set(0.1, 0.1, 1);
+  resetBird()
   scene.add(bird);
 
   // Game variables
@@ -102,10 +104,14 @@ function runGame(){
   let velocity = 0;
   let jumpStrength = 0.018;
 
+  let paused = true;
+
   // Apply jump strength when spacebar is pressed
   window.addEventListener('keydown', function(event) {
     if (event.code === 'Space') {
+      event.preventDefault();
       velocity = jumpStrength; 
+      paused = false;
     }
   });
 
@@ -134,14 +140,14 @@ function makeCol(row, gap){
 
     const labelDiv = document.createElement('div');
     labelDiv.className = 'label';
-    labelDiv.style.opacity = `${opacity}`;
     labelDiv.textContent = (i === 0) ?  shuffled.question: shuffled.answers[i];
+    labelDiv.style.display = 'none';
     container.appendChild(labelDiv);
     var spriteType;
 
     if(i==0){
-      var sprite = new THREE.Sprite(clearMaterial.clone());
-      sprite.scale.set(0.2, 0.5, 1);
+      var sprite = new THREE.Sprite(spriteMaterial.clone());
+      sprite.scale.set(1.2, 0.5, 1);
       sprite.position.setY(0);
       sprite.position.setX(xOffset -1);
       spriteType = "text";
@@ -165,10 +171,22 @@ function makeCol(row, gap){
 
     function alignHtmlText(sprite, label){
       const position = sprite.position.clone().project(camera);
-      const x = (position.x + 1) * window.innerWidth / 2 - label.offsetWidth / 2;
-      const y = -(position.y - 1) * window.innerHeight / 2 - label.offsetHeight / 2;
+
+      var newWidth = sprite.scale.x * flappyBirdContainer.clientWidth/2 *0.5625; //Assuming 16:9 aspect ratio
+      var newHeight = sprite.scale.y * flappyBirdContainer.clientHeight/2;
+
+      label.style.width = `${newWidth}px`;
+      label.style.maxWidth = `${newWidth}px`;
+      label.style.height = `${newHeight}px`;
+      label.style.maxHeight = `${newHeight}px`;
+
+
+      const x = (position.x + 1) * flappyBirdContainer.clientWidth/ 2 - label.offsetWidth / 2;
+      const y = -(position.y - 1) * flappyBirdContainer.clientHeight / 2 - label.offsetHeight / 2;
       const errorMargin = 1.2;
       const isInsideScreen = position.x >= -errorMargin && position.x <= errorMargin && position.y >= -errorMargin && position.y <= errorMargin;
+
+
 
       // Apply the calculated position to the HTML element and show/hide it based on visibility
       if (isInsideScreen) {
@@ -199,6 +217,10 @@ resetTowers();
 const animate = () => {
   requestAnimationFrame(animate);
 
+  if(paused){
+    return;
+  }
+
   // Update positions of moving cubes
   for (let col = 0; col < movingCubes.length; col++) {
     for (let row = 0; row < movingCubes[col].length; row++) {
@@ -218,9 +240,10 @@ const animate = () => {
         var lowerBound = 0.5 * row - 1.5;
         var upperBound = 0.5 * (row+1) -1.5;
           if(!(bird.position.y > lowerBound && bird.position.y < upperBound)){
-            handleCollsion();
-            resetTowers();
-            resetBird();
+            // handleCollsion();
+            // resetTowers();
+            // resetBird();
+            // paused = true;
           }
           movingCubes[col][row].passed = true;
       }

@@ -38,8 +38,8 @@ const Home = ({setTitle}) => {
         <Link to="/bird">
           <button className="cta-button">View Bird Demo</button>
         </Link>
-        <Link to="/text">
-          <button className="cta-button">View Text Demo</button>
+        <Link to="/worksheet">
+          <button className="cta-button">View Worksheet Demo</button>
         </Link>
       </div>
       <div className="featured-courses">
