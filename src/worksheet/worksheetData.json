@@ -1,0 +1,63 @@
+{
+  "sections": [
+    {
+      "id": 8101192327831,
+      "label": "subheading",
+      "value": {
+        "text": "Definition of Independent Events",
+        "data": null
+      }
+    },
+    {
+      "id": 9584531012734,
+      "label": "paragraph",
+      "value": {
+        "text": "Two events, A and B, are considered independent if the occurrence (or non-occurrence) of one event does not affect the probability of the other event happening. Mathematically, events A and B are independent if and only if the probability of their intersection is equal to the product of their individual probabilities.",
+        "data": null
+      }
+    },
+    {
+      "id": 1394524036561,
+      "label": "subheading",
+      "value": {
+        "text": "Multiplication Rule for Independent Events",
+        "data": null
+      }
+    },
+    {
+      "id": 4241637504081,
+      "label": "paragraph",
+      "value": {
+        "text": "The multiplication rule for independent events states that the probability of the intersection of two or more independent events is the product of their individual probabilities. For a sequence of independent events A, B, C, ..., the probability of all these events occurring together is given by: P(A∩B∩C∩…)=P(A)×P(B)×P(C)×…",
+        "data": null
+      }
+    },
+    {
+      "id": 4446155382846,
+      "label": "subheading",
+      "value": {
+        "text": "Conclusion",
+        "data": null
+      }
+    },
+    {
+      "id": 2731234059627,
+      "label": "paragraph",
+      "value": {
+        "text": "Understanding the concept of independent events and their probabilities is crucial in various fields such as statistics, finance, and engineering. It allows for accurate predictions and modeling of real-world scenarios where events occur independently of each other. By applying the multiplication rule for independent events, one can calculate the likelihood of complex outcomes, making it a powerful tool in probability theory.",
+        "data": null
+      }
+    },
+    {
+      "id": 2731234059367,
+      "label": "game",
+      "value": {
+        "text": null,
+        "data": {
+          "gameType": "bird",
+          "src": 72198739723
+        }
+      }
+    }
+  ]
+}

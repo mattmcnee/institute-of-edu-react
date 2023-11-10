@@ -4,8 +4,7 @@ import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 import { flappyBird } from './GameLogic';
 
-const Game = ({setTitle}) => {
-  setTitle("Game");
+const Game = ({gameType, src}) => {
   const canvasRef = useRef();
   const gameContainerRef = useRef(null);
   var begun;
@@ -38,10 +37,10 @@ const Game = ({setTitle}) => {
       const gameContainer = gameContainerRef.current;
       var embed = true;
       var scene = new THREE.Scene();
+      var aspectRatio = 16/9;
       var width = gameContainer.clientWidth;
-      var height = gameContainer.clientHeight;
+      var height = width/aspectRatio;
       console.log(width);
-      var aspectRatio = width / height;
       var camera = new THREE.OrthographicCamera(-aspectRatio, aspectRatio, 1, -1, 1, 1000);
       camera.position.z = 2;
       var renderer = new THREE.WebGLRenderer({ alpha: true, canvas: canvasRef.current  });
@@ -51,12 +50,11 @@ const Game = ({setTitle}) => {
 
       // Update camera and renderer on screen resize
       window.addEventListener('resize', () => {
-      var width = gameContainer.clientWidth;
-      var height = gameContainer.clientHeight;
-      console.log(height)
+        var width = gameContainer.clientWidth;
+        var height = width/aspectRatio;
+        console.log(height)
 
         renderer.setSize(width, height);
-        var aspectRatio = width / height;
 
         camera.left = -aspectRatio;
         camera.right = aspectRatio;
@@ -67,7 +65,28 @@ const Game = ({setTitle}) => {
         camera.updateProjectionMatrix();
       });
 
-      flappyBird(scene, camera, renderer, gameContainer, questions);
+      var game = {
+        "scene": scene,
+        "camera": camera,
+        "renderer": renderer,
+        "container": gameContainer,
+        "ratio": aspectRatio
+      };
+
+      console.log(game);
+
+      
+
+
+      switch (gameType) {
+        case "bird":
+          flappyBird(game, questions);
+          break;
+        default:
+          // flappyBird(game, questions);
+          console.log(gameType);
+          break;
+      }
     }
 
     return () => {

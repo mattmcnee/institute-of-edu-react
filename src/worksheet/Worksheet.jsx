@@ -1,5 +1,6 @@
 import React from 'react';
 import Game from '/src/three/Game';
+import worksheetData from './worksheetData.json';
 
 const Worksheet = ({setTitle}) => {
   setTitle("Game Worksheet");
@@ -7,6 +8,7 @@ const Worksheet = ({setTitle}) => {
     return;
   }
   console.log("Home!!!");
+  console.log(worksheetData);
   return (
     <div className="home-page">
       <nav className="video-nav flex-div">
@@ -27,51 +29,30 @@ const Worksheet = ({setTitle}) => {
         </div>
       </nav>
       <div className="worksheet-conatiner">
-        <div className="worksheet-section">
-          <h2>Definition of Independent Events</h2>
-        </div>
+        {worksheetData.sections.map((section) => (
+          <div key={section.id} className="worksheet-section">
+            {section.label === 'subheading' && <h2>{section.value.text}</h2>}
+            {section.label === 'paragraph' && <p>{section.value.text}</p>}
+            {section.label === 'game' && (
+              <div className="game-container">
+                <div className="game-window">
+                  {/* You can pass the gameType and src as props if needed */}
+                  <Game gameType={section.value.data.gameType} src={section.value.data.src} />
+                </div>
+              </div>
+            )}
+          </div>
+        ))}
 
-        <div className="worksheet-section">
-          <p>Two events, A and B, are considered independent if the occurrence (or non-occurrence) of one event does not affect the probability of the other event happening. Mathematically, events A and B are independent if and only if the probability of their intersection is equal to the product of their individual probabilities</p>
-        </div>
 
-        <div className="worksheet-section">
-          <p>P(A∩B)=P(A)×P(B)</p>
-        </div>
 
-        <div className="worksheet-section">
-          <h2>Multiplication Rule for Independent Events</h2>
-        </div>
-
-        <div className="worksheet-section">
-          <p>The multiplication rule for independent events states that the probability of the intersection of two or more independent events is the product of their individual probabilities. For a sequence of independent events A, B, C, ..., the probability of all these events occurring together is given by:</p>
-        </div>
-
-        <div className="worksheet-section">
-          <p>P(A∩B∩C∩…)=P(A)×P(B)×P(C)×…</p>
-        </div>
-
-        <div className="worksheet-section">
-          <h2>Conclusion</h2>
-        </div>
-
-        <div className="worksheet-section">
-          <p>Understanding the concept of independent events and their probabilities is crucial in various fields such as statistics, finance, and engineering. It allows for accurate predictions and modeling of real-world scenarios where events occur independently of each other. By applying the multiplication rule for independent events, one can calculate the likelihood of complex outcomes, making it a powerful tool in probability theory.</p>
-        </div>
-
-        <div className="worksheet-section">
-          <h2>Test your knowledge</h2>
-        </div>
-
-        <div className="worksheet-section">
+{/*        <div className="worksheet-section">
           <div className="game-container">
             <div className="game-window">
-              <Game setTitle={updateTitleString}/>
+              <Game/>
             </div>
           </div>
-        </div>
-
-
+        </div>*/}
       </div>
     </div>
   );

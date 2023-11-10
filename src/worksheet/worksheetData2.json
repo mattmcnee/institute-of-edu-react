@@ -1,0 +1,63 @@
+{
+  "sections": [
+    {
+      "id": 10129384756,
+      "label": "subheading",
+      "value": {
+        "text": "Basics of Probability",
+        "data": null
+      }
+    },
+    {
+      "id": 45823904823,
+      "label": "paragraph",
+      "value": {
+        "text": "Probability is a branch of mathematics that deals with calculating the likelihood of a given event's occurrence, which is expressed as a number between 0 and 1. Notationally, the probability of event A is represented by P(A).",
+        "data": null
+      }
+    },
+    {
+      "id": 57382910293,
+      "label": "subheading",
+      "value": {
+        "text": "Addition Rule for Probability",
+        "data": null
+      }
+    },
+    {
+      "id": 98237492834,
+      "label": "paragraph",
+      "value": {
+        "text": "The addition rule of probability states that the probability of either of two mutually exclusive events occurring is the sum of their individual probabilities. For events A and B, this is given as: P(A∪B) = P(A) + P(B) - P(A∩B).",
+        "data": null
+      }
+    },
+    {
+      "id": 23849238423,
+      "label": "subheading",
+      "value": {
+        "text": "Real-life Applications",
+        "data": null
+      }
+    },
+    {
+      "id": 48923849283,
+      "label": "paragraph",
+      "value": {
+        "text": "Probability theory is essential in everyday life and is used in various fields like finance, insurance, and weather forecasting. Understanding probability helps in making more informed decisions and predictions about future events.",
+        "data": null
+      }
+    },
+    {
+      "id": 23904823094,
+      "label": "game",
+      "value": {
+        "text": null,
+        "data": {
+          "gameType": "puzzle",
+          "src": 98237409283
+        }
+      }
+    }
+  ]
+}
