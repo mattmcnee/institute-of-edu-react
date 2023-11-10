@@ -60,11 +60,11 @@ function fitLabelToBox(box, label, game){
 
 // 
 // 
-//  Flappy bird game
+//  bird jump game
 // 
 // 
 
-export function flappyBird(game, questions) {
+export function birdJump(game, questions) {
 
     // Game variables
   let gravity = 0.00036; 
@@ -236,4 +236,262 @@ export function flappyBird(game, questions) {
   };
 
   animate();
+}
+
+// 
+// 
+//  cube tower game
+// 
+// 
+
+export function cubeTower(game, questions) {
+  var gridSize = 0.1;
+
+  var spriteMaterial = new THREE.SpriteMaterial({ color: 0x32a852 });
+  var wallMaterial = new THREE.SpriteMaterial({ color: 0x222222 });
+  
+
+  // Second cube
+  const cube2 = new THREE.Sprite(wallMaterial);
+  cube2.scale.set(gridSize, 2, 0.1);
+  cube2.position.y = 0;
+  cube2.position.x = -12.5*gridSize;
+  game.scene.add(cube2);
+
+  // Third cube
+  const cube3 = new THREE.Sprite(wallMaterial);
+  cube3.scale.set(gridSize, 2, 0.1);
+  cube3.position.y = 0;
+  cube3.position.x = -3.5*gridSize;
+  game.scene.add(cube3);
+
+  var pieceGroup = [];
+
+
+
+
+var positionState = 0;
+  createCubeSet();
+
+  animate();
+
+
+
+function getSmallPositionsFor() {
+  var type = Math.floor(Math.random() * 2);
+  switch (type) {
+    case 0: // Small L
+      return [
+        [-gridSize, 0, 0],
+        [0, 0, 0],
+        [0, gridSize, 0]
+      ]; 
+    case 1: // Small Line
+      return [
+        [-gridSize, 0, 0],
+        [0, 0, 0],
+        [gridSize, 0, 0],
+      ];
+    default:
+      return [
+        [-gridSize, 0, 0],
+        [0, 0, 0],
+        [0, gridSize, 0]
+      ]; 
+  }
+}
+
+function getPositionsFor() {
+  var type = Math.floor(Math.random() * 7);
+  switch (type) {
+    case 0: // Box
+      return [
+        [-gridSize, 0, 0],
+        [0, 0, 0],
+        [-gridSize, gridSize, 0],
+        [0, gridSize, 0]
+      ];
+    case 1: // T-shape
+      return [
+        [-gridSize, 0, 0],
+        [0, 0, 0],
+        [gridSize, 0, 0],
+        [0, gridSize, 0]
+      ];
+    case 2: // Line
+      return [
+        [-gridSize, 0, 0],
+        [0, 0, 0],
+        [gridSize, 0, 0],
+        [2 * gridSize, 0, 0]
+      ];
+    case 3: // L-shape
+      return [
+        [0, 0, 0],
+        [0, gridSize, 0],
+        [0, -gridSize, 0],
+        [-gridSize, -gridSize, 0]
+      ];
+    case 4: // L-shape 2
+      return [
+        [0, 0, 0],
+        [0, gridSize, 0],
+        [0, -gridSize, 0],
+        [gridSize, -gridSize, 0]
+      ];
+    case 5: // S-shape
+      return [
+        [-gridSize, 0, 0],
+        [0, 0, 0],
+        [0, gridSize, 0],
+        [gridSize, gridSize, 0]
+      ];
+    case 6: // Z-shape
+      return [
+        [gridSize, 0, 0],
+        [0, 0, 0],
+        [0, gridSize, 0],
+        [-gridSize, gridSize, 0]
+      ];
+    default:
+      return [
+        [0, 0, 0]
+      ];
+  }
+}
+
+function getLargePositionsFor() {
+  var type = Math.floor(Math.random() * 5);
+  switch (type) {
+    case 0: // Five-block L-shape
+      return [
+        [0, 0, 0],
+        [0, gridSize, 0],
+        [0, -gridSize, 0],
+        [0, -gridSize*2, 0],
+        [-gridSize, -gridSize*2, 0]
+      ];
+    case 1: // Five-block T-shape
+      return [
+        [0, 0, 0],
+        [0, gridSize, 0],
+        [0, -gridSize, 0],
+        [0, -gridSize*2, 0],
+        [0, -gridSize*2, 0]
+      ];
+    case 2: // Five-block Line
+      return [
+        [0, gridSize*2, 0],
+        [0, gridSize, 0],
+        [0, 0, 0],
+        [0, -gridSize, 0],
+        [0, -gridSize*2, 0]
+      ];
+
+    case 3: // Five-block L-shape 2
+      return [
+        [0, 0, 0],
+        [0, gridSize, 0],
+        [0, -gridSize, 0],
+        [0, -gridSize*2, 0],
+        [gridSize, -gridSize*2, 0]
+      ];
+    case 4: // Five-block Cross
+      return [
+        [0, 0, 0],
+        [-gridSize, 0, 0],
+        [gridSize, 0, 0],
+        [0, gridSize, 0],
+        [0, -gridSize, 0]
+      ];
+    default:
+      return [
+        [0, 0, 0],
+        [-gridSize, 0, 0],
+        [gridSize, 0, 0],
+        [0, gridSize, 0],
+        [0, -gridSize, 0]
+      ];
+  }
+}
+
+// Define the function that alternates between states
+function usePositionState() {
+  switch (positionState) {
+    case 0:
+      positionState = 1;
+      return getSmallPositionsFor();
+    case 1:
+      positionState = 2;
+      return getPositionsFor();
+    case 2:
+      positionState = 0;
+      return getLargePositionsFor();
+    default:
+      console.log("Invalid state");
+      return getPositionsFor();
+  }
+}
+
+
+
+
+  
+function createCubeSet() {
+  // Create a group to hold all the cubes
+    const lCubeGroup = new THREE.Group();
+
+  var positions = usePositionState();
+
+  console.log(positions);
+
+  for (const position of positions) {
+    const cube = new THREE.Sprite(spriteMaterial);
+    cube.scale.set(gridSize, gridSize, 1);
+    cube.position.set(position[0], position[1], position[2]);
+    lCubeGroup.add(cube);
+  }
+
+  lCubeGroup.position.set(-8.5*gridSize , 0.95, 0)
+
+  // Add the entire group to the scene
+  game.scene.add(lCubeGroup);
+  pieceGroup.push(lCubeGroup);
+}
+
+// Define an array of positions for the cubes
+
+
+
+
+
+
+
+var lastTime = 0;
+var deltaMove = 0;
+function animate() {
+  requestAnimationFrame(animate);
+
+  // Calculate the time elapsed since the last frame
+  const currentTime = Date.now();
+  const deltaTime = currentTime - lastTime;
+
+ 
+  if(deltaTime > 1000){
+    for (let i = 0; i < pieceGroup.length; i++) {
+      pieceGroup[i].rotateZ(Math.PI / 2);
+      pieceGroup[i].position.y -= gridSize;
+    }
+    lastTime = currentTime;   
+    deltaMove += 1;
+  }
+
+  if(deltaMove >= 5){
+    createCubeSet();
+    deltaMove = 0;
+  }
+
+
+  game.renderer.render(game.scene, game.camera);
+}
 }

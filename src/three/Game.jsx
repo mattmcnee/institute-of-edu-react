@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 import { FontLoader } from 'three/addons/loaders/FontLoader.js';
-import { flappyBird } from './GameLogic';
+import { birdJump, cubeTower } from './GameLogic';
 
 const Game = ({gameType, src}) => {
   const canvasRef = useRef();
@@ -80,10 +80,10 @@ const Game = ({gameType, src}) => {
 
       switch (gameType) {
         case "bird":
-          flappyBird(game, questions);
+          birdJump(game, questions);
           break;
         default:
-          // flappyBird(game, questions);
+          cubeTower(game, questions);
           console.log(gameType);
           break;
       }
