@@ -6,6 +6,7 @@ import ChartLayout from './Chart';
 import Quiz from './Quiz';
 import Game from './three/Game';
 import Worksheet from './worksheet/Worksheet';
+import Login from './login/Login';
 import './App.css'
 
 const App = ({onTitleString}) => {
@@ -21,7 +22,7 @@ const App = ({onTitleString}) => {
         <Route path="/chart" element={<ChartLayout setTitle={updateTitleString}/>} />
         <Route path="/quiz" element={<Quiz setTitle={updateTitleString}/>} />
         <Route path="/bird" element={<Game setTitle={updateTitleString}/>} />
-        <Route path="/text" element={<Game setTitle={updateTitleString}/>} />
+        <Route path="/login" element={<Login setTitle={updateTitleString}/>} />
         <Route path="/worksheet" element={<Worksheet setTitle={updateTitleString}/>} />
       </Routes>
     </Router>

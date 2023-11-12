@@ -41,6 +41,9 @@ const Home = ({setTitle}) => {
         <Link to="/worksheet">
           <button className="cta-button">View Worksheet Demo</button>
         </Link>
+        <Link to="/login">
+          <button className="cta-button">Login</button>
+        </Link>
       </div>
       <div className="featured-courses">
         <h2>Featured Courses</h2>
