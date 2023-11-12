@@ -1,9 +1,30 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 
 const Home = ({setTitle}) => {
   setTitle("Edu Homepage");
-  console.log("Home!!!");
+
+  const [currentUser, setCurrentUser] = useState(null);
+
+  // Listen for changes in the user's authentication state
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, update the current user state
+        setCurrentUser(user.displayName || user.email);
+      } else {
+        // User is signed out, set currentUser to null
+        setCurrentUser(null);
+      }
+    });
+
+    // Clean up the subscription when the component unmounts
+    return () => unsubscribe();
+  }, []);
+
+
   return (
     <div className="home-page">
       <nav className="video-nav flex-div">
@@ -18,7 +39,7 @@ const Home = ({setTitle}) => {
         </div>
         <div className="nav-right flex-div">
           <div className="hover-div" id="nav-week">
-            MarginalRabbit45
+            {currentUser ? currentUser : "Guest"}
           </div>
           <i className="fas fa-user hover-div"></i>
         </div>

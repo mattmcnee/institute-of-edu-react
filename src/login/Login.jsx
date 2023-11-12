@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, set } from 'firebase/database';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom'; // Import useHistory
 
 // Firebase configuration
@@ -25,6 +25,19 @@ const Login = ({ setTitle }) => {
   const [error, setError] = useState(null);
 
   const navigate = useNavigate(); // Get access to the history object
+
+    useEffect(() => {
+    // Check if a user is already signed in
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, redirect to '/worksheet' or another authenticated route
+        navigate('/worksheet');
+      }
+    });
+
+    // Clean up the subscription when the component unmounts
+    return () => unsubscribe();
+  }, [auth, navigate]);
 
   // Function to write user data
   const writeUserData = (userId, name, email) => {

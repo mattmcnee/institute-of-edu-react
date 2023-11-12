@@ -1,13 +1,62 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import { initializeApp } from 'firebase/app';
+import { getDatabase, ref, set, push } from 'firebase/database';
+import { getAuth, onAuthStateChanged  } from 'firebase/auth';
 import PairsInput from './PairsInput.jsx';
 import MediaInput from './MediaInput.jsx';
 import './form.css';
+
+// Configure and initialize firebase
+const firebaseConfig = {
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID
+};
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+const auth = getAuth(app);
 
 const Form = () => {
   const [selectedOption, setSelectedOption] = useState("subheading");
   const [inputs, setInputs] = useState([]);
   const [jsonData, setJsonData] = useState([]);
+
+  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUserId, setCurrentUserId] = useState(null);
+
+  // Listen for changes in the user's authentication state
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, update the current user state
+        setCurrentUser(user.displayName || user.email);
+        setCurrentUserId(user.uid);
+      } else {
+        // User is signed out, set currentUser to null
+        setCurrentUser(null);
+        setCurrentUserId(null);
+      }
+      console.log(currentUser);
+    });
+
+    // Clean up the subscription when the component unmounts
+    return () => unsubscribe();
+  }, []);
+
+  const writeUserData = (data) => {
+    if(currentUserId){
+      const sheetData = {
+        title: "My New Sheet",
+        owner: currentUserId
+      };
+      console.log(currentUser);
+    const newSheetRef = push(ref(database, 'sheets/'));
+    set(newSheetRef, sheetData)    
+    }
+  };
 
   const handleJsonData = (data) => {
     var updatedJson;
@@ -69,7 +118,7 @@ const handleSubmit = () => {
       id: input.id
     };
   });
-
+  writeUserData(updatedFormValues);
   console.log("Form Values:", updatedFormValues);
 };
 
