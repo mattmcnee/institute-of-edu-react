@@ -24,39 +24,11 @@ const Worksheet = ({ setTitle }) => {
     return () => unsubscribe();
   }, []);
 
-  const handleLogout = () => {
-    const auth = getAuth();
-    signOut(auth)
-      .then(() => {
-        // User has been signed out
-        setCurrentUser(null); // Clear the currentUser state
-      })
-      .catch((error) => {
-        console.error("Error signing out:", error);
-      });
-  };
-
   console.log("Home!!!");
   console.log(worksheetData);
   return (
     <div className="home-page">
-      <nav className="video-nav flex-div">
-        <div className="nav-left flex-div">
-          <i className="fas fa-bars menu-icon hover-div"></i>
-          <div className="hover-div">New Worksheet</div>
-        </div>
-        <div className="nav-middle flex-div">
-          <div className="bar-content">
-            <div className="progress-container" id="main-bar"></div>
-          </div>
-        </div>
-        <div className="nav-right flex-div">
-          <div className="hover-div" id="nav-week">
-            {currentUser ? currentUser : "Guest"}
-          </div>
-          <i className="fas fa-user hover-div" onClick={handleLogout}></i>
-        </div>
-      </nav>
+      <Nav title={"New Worksheet"} user={currentUser}/>
       <div className="worksheet-conatiner">
         {worksheetData.sections.map((section) => (
           <div key={section.id} className="worksheet-section">

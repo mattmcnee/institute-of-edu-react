@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
+import CardScroll from './Cards';
+import Nav from '/src/Nav';
 
 const Home = ({setTitle}) => {
   setTitle("Edu Homepage");
@@ -24,26 +26,19 @@ const Home = ({setTitle}) => {
     return () => unsubscribe();
   }, []);
 
+  var cardData = [
+  { "content": "Card 1 Content", "link": "/worksheet" },
+  { "content": "Card 2 Content", "link": "/worksheet" },
+  { "content": "Card 3 Content", "link": "/worksheet" },
+  { "content": "Card 4 Content", "link": "/worksheet" },
+  { "content": "Card 5 Content", "link": "/worksheet" },
+  { "content": "Card 6 Content", "link": "/worksheet" }
+];
+
 
   return (
     <div className="home-page">
-      <nav className="video-nav flex-div">
-        <div className="nav-left flex-div">
-          <i className="fas fa-bars menu-icon hover-div"></i>
-          <div className="hover-div">New Worksheet</div>
-        </div>
-        <div className="nav-middle flex-div">
-          <div className="bar-content">
-            <div className="progress-container" id="main-bar"></div>
-          </div>
-        </div>
-        <div className="nav-right flex-div">
-          <div className="hover-div" id="nav-week">
-            {currentUser ? currentUser : "Guest"}
-          </div>
-          <i className="fas fa-user hover-div"></i>
-        </div>
-      </nav>
+      <Nav title={"Edu"} user={currentUser}/>
       <div className="hero-section">
         <h1>Welcome to Edu</h1>
         <p>Empowering Education, One Click at a Time</p>
@@ -66,6 +61,8 @@ const Home = ({setTitle}) => {
           <button className="cta-button">Login</button>
         </Link>
       </div>
+      <h2>Worksheets</h2>
+      <CardScroll cards={cardData} />
       <div className="featured-courses">
         <h2>Featured Courses</h2>
         {/* Display featured courses here */}
