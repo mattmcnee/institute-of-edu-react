@@ -26,20 +26,41 @@ const Home = ({setTitle}) => {
     return () => unsubscribe();
   }, []);
 
-  var cardData = [
-  { "content": "Card 1 Content", "link": "/worksheet" },
-  { "content": "Card 2 Content", "link": "/worksheet" },
-  { "content": "Card 3 Content", "link": "/worksheet" },
-  { "content": "Card 4 Content", "link": "/worksheet" },
-  { "content": "Card 5 Content", "link": "/worksheet" },
-  { "content": "Card 6 Content", "link": "/worksheet" }
+var cardData = [
+  { "content": "Fundamentals of Mathematics", "link": "/worksheet" },
+  { "content": "Algebra Basics", "link": "/worksheet" },
+  { "content": "Geometry Essentials", "link": "/worksheet" },
+  { "content": "Trigonometry Fundamentals", "link": "/worksheet" },
+  { "content": "Calculus Concepts", "link": "/worksheet" },
+  { "content": "Statistics for Beginners", "link": "/worksheet" }
 ];
+
+var cardData2 = [
+  { "content": "Epic Trivia Challenge", "link": "/quiz" },
+  { "content": "Science Brain Teasers", "link": "/quiz" },
+  { "content": "History Masters Quiz", "link": "/quiz" },
+  { "content": "Literary Puzzlers", "link": "/quiz" },
+  { "content": "GeoQuest Adventure", "link": "/quiz" },
+  { "content": "Artistic Enigma", "link": "/quiz" }
+];
+
 
 
   return (
     <div className="home-page">
       <Nav title={"Edu"} user={currentUser}/>
+
       <div className="hero-section">
+        {/*<div className="hero-img"></div>*/}
+        <img src="src/assets/shapes.png" className="hero-img"></img>
+        <div className="hero-text">
+          <h2>Edu</h2>
+          Edu is an online learning platform that offers a wide range of courses for students of all ages.
+          Whether you want to learn programming, improve your math skills, or explore creative arts, we have a course for you.
+          Join Edu today and start your learning journey!          
+        </div>
+      </div>
+{/*      <div className="hero-section">
         <h1>Welcome to Edu</h1>
         <p>Empowering Education, One Click at a Time</p>
         <Link to="/create">
@@ -60,21 +81,15 @@ const Home = ({setTitle}) => {
         <Link to="/login">
           <button className="cta-button">Login</button>
         </Link>
-      </div>
-      <h2>Worksheets</h2>
-      <CardScroll cards={cardData} />
-      <div className="featured-courses">
-        <h2>Featured Courses</h2>
-        {/* Display featured courses here */}
-      </div>
-      <div className="about-section">
-        <h2>About Edu</h2>
-        <p>
-          Edu is an online learning platform that offers a wide range of courses for students of all ages.
-          Whether you want to learn programming, improve your math skills, or explore creative arts, we have a course for you.
-          Join Edu today and start your learning journey!
-        </p>
-      </div>
+      </div>*/}
+      
+      <CardScroll title="Featured Games" cards={cardData2} />
+{/*      <div className="fact-section">
+        <h2>Fact of the day</h2>
+        <span>Did you know that honey never spoils? Archaeologists have found pots of honey in ancient Egyptian tombs that are over 3,000 years old and still perfectly edible!</span>
+      </div>*/}
+      <CardScroll title="Featured Worksheets" cards={cardData} />
+
     </div>
   );
 };

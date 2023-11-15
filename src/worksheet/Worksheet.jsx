@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Game from '/src/three/Game';
 import worksheetData from './worksheetData.json';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
+import Nav from '/src/Nav';
 
 const Worksheet = ({ setTitle }) => {
   setTitle("Game Worksheet");

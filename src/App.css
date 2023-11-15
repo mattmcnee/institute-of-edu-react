@@ -79,8 +79,8 @@ a{
 nav{
   padding: 10px 2%;
   justify-content: space-between;
-/*  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);*/
-border-bottom: 1px solid var(--background-outline);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+
   background: #fff;
   position: sticky;
   top: 0;
@@ -205,6 +205,7 @@ border-bottom: 1px solid var(--background-outline);
   display: flex;
   align-items: center;
   overflow: hidden;
+  width: 100%;
 }
 
 .scroll-menu {
@@ -212,12 +213,13 @@ border-bottom: 1px solid var(--background-outline);
   overflow: hidden;
   padding: 20px 0;
   margin: 0 10px;
+  width: 100%;
 }
 
 .card {
   flex: 0 0 auto;
   width: 200px;
-  height: 120px;
+  height: 160px;
   margin: 0 10px;
   background-color: #fff;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -269,4 +271,96 @@ border-bottom: 1px solid var(--background-outline);
 
 .scroll-box .scroll-button:last-child{
   margin-right: 10px;
+}
+
+.title-box{
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  width: 100%;
+  padding-bottom: 5px;
+  margin-bottom: 0;
+}
+
+.search-card{
+  flex-grow: 1;
+  border: none;
+  outline: none;
+  padding: 0;
+  background-color: transparent;
+}
+
+.search-box{
+  flex-grow: 1;
+  display: flex;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 0 10px;
+}
+
+.add-card{
+  border-radius: 5px;
+  border: none;
+  margin: 0 10px; 
+  height: 29.5px;
+  width: 29.5px;
+  font-size: 1.5rem;
+  background-color: transparent;
+}
+
+.search-button{
+  border: none;
+  outline: none;
+  background-color: transparent;
+}
+
+.search-button:hover, .add-card:hover{
+  cursor: pointer;
+}
+
+.hero-section{
+/*  background-color: #657985;*/
+  display: flex;
+  position: relative;
+}
+
+.hero-img{
+  flex-grow: 1;
+  max-width: 200px;
+  margin: 50px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.hero-text{
+  margin: auto 50px auto 0;
+}
+
+.hero-text h2{
+  margin-top: 0;
+}
+
+.card-header h2{
+  margin: 0 10px 0 0;
+}
+
+.card-header{
+  display: flex;
+  margin: 0 50px;
+}
+
+.card-header .add-card:hover, .card-header .search-box:hover{
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.fact-section{
+  margin: 40px 50px;
+}
+
+.fact-section h2{
+  margin-top: 0;
+}
+
+.card-container{
+  margin-bottom: 50px;
 }
