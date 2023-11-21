@@ -1,29 +1,69 @@
 import React, { useState, useEffect } from 'react';
 import Game from '/src/three/Game';
-import worksheetData from './worksheetData.json';
-import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
+import { getDatabase, ref, get } from 'firebase/database';
 import Nav from '/src/Nav';
 
 const Worksheet = ({ setTitle }) => {
-  setTitle("Game Worksheet");
+  const [worksheetData, setWorksheetData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  function convertToFirebaseFormat(data) {
-    const firebaseFormat = {};
-    data.sections.forEach(section => {
-      firebaseFormat[section.id] = section;
+  useEffect(() => {
+    setTitle("Game Worksheet");
+    
+    // Firebase database reference to the specific location
+    const db = getDatabase();
+    const worksheetRef = ref(db, '/sheets/-Njm55Y-cUGYAlZb5R4u');
+    
+    // Fetch the data from Firebase
+    get(worksheetRef)
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          const firebaseData = snapshot.val().data;
+          const cleanedSections = convertToJsonArray(firebaseData);
+          setWorksheetData(cleanedSections);
+        } else {
+          console.log('No data available');
+        }
+        setLoading(false); // Mark loading as complete
+      })
+      .catch((error) => {
+        console.error('Error getting data:', error);
+        setLoading(false); // Mark loading as complete, even in case of an error
+      });
+  }, [setTitle]);
+
+  function convertToJsonArray(firebaseData) {
+    if (!firebaseData) return []; // Handle empty data gracefully
+
+    // Convert the object into an array of its values
+    const sectionsArray = Object.values(firebaseData);
+    sectionsArray.sort((a, b) => a.order - b.order);
+
+    // Remove the 'order' property from each section
+    const cleanedSections = sectionsArray.map(section => {
+      const { order, ...cleanSection } = section;
+      return cleanSection;
     });
-    return firebaseFormat;
+    return cleanedSections;
   }
 
-  console.log("Home!!!");
-  console.log(worksheetData);
-  console.log(convertToFirebaseFormat(worksheetData));
+  if (loading) {
+    // Display a loading indicator while fetching data
+    return (
+      <div className="home-page">
+        <Nav title={"New Worksheet"}/>
+        <div className="worksheet-container">
+          <div>Loading...</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="home-page">
       <Nav title={"New Worksheet"}/>
-      <div className="worksheet-conatiner">
-        {worksheetData.sections.map((section) => (
+      <div className="worksheet-container">
+        {worksheetData.map((section) => (
           <div key={section.id} className="worksheet-section">
             {section.label === 'subheading' && <h2>{section.value.text}</h2>}
             {section.label === 'paragraph' && <p>{section.value.text}</p>}

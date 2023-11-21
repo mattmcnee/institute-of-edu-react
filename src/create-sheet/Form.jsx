@@ -30,8 +30,10 @@ const Form = () => {
 
   function convertToFirebaseFormat(data) {
     const firebaseFormat = {};
-    data.sections.forEach(section => {
-      firebaseFormat[section.id] = section;
+    data.sections.forEach((section, index) => {
+      // Adding an 'order' property to each section
+      const sectionWithOrder = { ...section, order: index };
+      firebaseFormat[section.id] = sectionWithOrder;
     });
     return firebaseFormat;
   }
@@ -60,7 +62,7 @@ const Form = () => {
     if(currentUserId){
       const sheetData = {
         title: "My New Sheet",
-        data: "Hello"
+        data: convertToFirebaseFormat(worksheetData)
       };
       console.log(currentUser);
       console.log(convertToFirebaseFormat(worksheetData))
