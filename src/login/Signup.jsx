@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, set } from 'firebase/database';
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
@@ -18,8 +18,8 @@ const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 const auth = getAuth(app);
 
-const Login = ({ setTitle }) => {
-  setTitle('Login');
+const Signup = ({ setTitle }) => {
+  setTitle('Create Account');
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -27,7 +27,7 @@ const Login = ({ setTitle }) => {
 
   const navigate = useNavigate(); // Get access to the history object
 
-    useEffect(() => {
+  useEffect(() => {
     // Check if a user is already signed in
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -48,13 +48,13 @@ const Login = ({ setTitle }) => {
     });
   };
 
-  // Function to handle login
-  const handleLogin = () => {
-    signInWithEmailAndPassword(auth, email, password)
+  // Function to handle account creation
+  const handleCreateAccount = () => {
+    createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Signed in successfully
+        // Account created successfully
         const user = userCredential.user;
-        writeUserData(user.uid, 'John Blue', email);
+        writeUserData(user.uid, 'New User', email);
         setError(null);
         
         // Redirect to '/worksheet'
@@ -67,8 +67,8 @@ const Login = ({ setTitle }) => {
 
   return (
     <div>
-      <Link to="/signup">
-        <button className="cta-button">Sign Up</button>
+      <Link to="/login">
+        <button className="cta-button">Already have an account? Log In</button>
       </Link>
       <input
         type="email"
@@ -82,11 +82,10 @@ const Login = ({ setTitle }) => {
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Password"
       />
-      <button onClick={handleLogin}>Login</button>
+      <button onClick={handleCreateAccount}>Create Account</button>
       {error && <p>{error}</p>}
     </div>
   );
 };
 
-export default Login;
-
+export default Signup;

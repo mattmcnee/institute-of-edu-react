@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 
-function Nav({ title, user }) {
-
+function Nav({ title}) {
+  const [currentUser, setCurrentUser] = useState(null);
 
   const handleLogout = () => {
     const auth = getAuth();
+
     signOut(auth)
       .then(() => {
         // User has been signed out
@@ -15,6 +16,22 @@ function Nav({ title, user }) {
         console.error("Error signing out:", error);
       });
   };
+
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, update the current user state
+        setCurrentUser(user.displayName || user.email);
+      } else {
+        // User is signed out, set currentUser to null
+        setCurrentUser(null);
+      }
+    });
+
+    // Clean up the subscription when the component unmounts
+    return () => unsubscribe();
+  }, []);
 
   return (
     <nav className="video-nav flex-div">
@@ -29,7 +46,7 @@ function Nav({ title, user }) {
       </div>
       <div className="nav-right flex-div">
         <div className="hover-div" id="nav-week">
-          {user ? user : "Login"}
+          {currentUser ? currentUser : "Login"}
         </div>
         <i className="fas fa-user hover-div" onClick={handleLogout}></i>
       </div>

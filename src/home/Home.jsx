@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import CardScroll from './Cards';
 import Nav from '/src/Nav';
+import shapesImage from '/src/assets/shapes.png';
+
 
 const Home = ({setTitle}) => {
   setTitle("Edu Homepage");
@@ -52,7 +54,7 @@ var cardData2 = [
 
       <div className="hero-section">
         {/*<div className="hero-img"></div>*/}
-        <img src="src/assets/shapes.png" className="hero-img"></img>
+        <img src={shapesImage} className="hero-img" alt="Shapes" />
         <div className="hero-text">
           <h2>Edu</h2>
           Edu is an online learning platform that offers a wide range of courses for students of all ages.

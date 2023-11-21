@@ -5,6 +5,7 @@ import { getDatabase, ref, set, push } from 'firebase/database';
 import { getAuth, onAuthStateChanged  } from 'firebase/auth';
 import PairsInput from './PairsInput.jsx';
 import MediaInput from './MediaInput.jsx';
+import worksheetData from '/src/worksheet/worksheetData.json';
 import './form.css';
 
 // Configure and initialize firebase
@@ -25,6 +26,15 @@ const Form = () => {
 
   const [currentUser, setCurrentUser] = useState(null);
   const [currentUserId, setCurrentUserId] = useState(null);
+
+
+  function convertToFirebaseFormat(data) {
+    const firebaseFormat = {};
+    data.sections.forEach(section => {
+      firebaseFormat[section.id] = section;
+    });
+    return firebaseFormat;
+  }
 
   // Listen for changes in the user's authentication state
   useEffect(() => {
@@ -50,9 +60,10 @@ const Form = () => {
     if(currentUserId){
       const sheetData = {
         title: "My New Sheet",
-        owner: currentUserId
+        data: "Hello"
       };
       console.log(currentUser);
+      console.log(convertToFirebaseFormat(worksheetData))
     const newSheetRef = push(ref(database, 'sheets/'));
     set(newSheetRef, sheetData)    
     }

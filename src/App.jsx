@@ -7,6 +7,7 @@ import Quiz from './Quiz';
 import Game from './three/Game';
 import Worksheet from './worksheet/Worksheet';
 import Login from './login/Login';
+import Signup from './login/Signup';
 import './App.css'
 
 const App = ({onTitleString}) => {
@@ -24,6 +25,7 @@ const App = ({onTitleString}) => {
         <Route path="/bird" element={<Game setTitle={updateTitleString}/>} />
         <Route path="/login" element={<Login setTitle={updateTitleString}/>} />
         <Route path="/worksheet" element={<Worksheet setTitle={updateTitleString}/>} />
+        <Route path="/signup" element={<Signup setTitle={updateTitleString}/>} />
       </Routes>
     </Router>
   );
