@@ -24,7 +24,7 @@ const App = ({onTitleString}) => {
         <Route path="/quiz" element={<Quiz setTitle={updateTitleString}/>} />
         <Route path="/bird" element={<Game setTitle={updateTitleString}/>} />
         <Route path="/login" element={<Login setTitle={updateTitleString}/>} />
-        <Route path="/worksheet" element={<Worksheet setTitle={updateTitleString}/>} />
+        <Route path="/worksheet/:id" element={<Worksheet setTitle={updateTitleString}/>} />
         <Route path="/signup" element={<Signup setTitle={updateTitleString}/>} />
       </Routes>
     </Router>

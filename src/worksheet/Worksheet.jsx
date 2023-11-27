@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import Game from '/src/three/Game';
 import { getDatabase, ref, get } from 'firebase/database';
 import Nav from '/src/Nav';
@@ -6,13 +7,14 @@ import Nav from '/src/Nav';
 const Worksheet = ({ setTitle }) => {
   const [worksheetData, setWorksheetData] = useState([]);
   const [loading, setLoading] = useState(true);
+  let { id } = useParams();
 
   useEffect(() => {
     setTitle("Game Worksheet");
     
     // Firebase database reference to the specific location
     const db = getDatabase();
-    const worksheetRef = ref(db, '/sheets/-Njm55Y-cUGYAlZb5R4u');
+    const worksheetRef = ref(db, `/sheets/${id}`);
     
     // Fetch the data from Firebase
     get(worksheetRef)
@@ -21,6 +23,7 @@ const Worksheet = ({ setTitle }) => {
           const firebaseData = snapshot.val().data;
           const cleanedSections = convertToJsonArray(firebaseData);
           setWorksheetData(cleanedSections);
+          console.log(cleanedSections);
         } else {
           console.log('No data available');
         }

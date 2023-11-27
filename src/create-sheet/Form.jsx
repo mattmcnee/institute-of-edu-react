@@ -109,17 +109,18 @@ const Form = () => {
     newInputs.push({
       id: new Date().getTime(),
       label: selectedOption,
-      value: "",
+      value: { text: "" },
     });
     setInputs(newInputs);
     console.log("Selected Option:", selectedOption);
   };
 
-  const handleInputChange = (id, value) => {
-    const updatedInputs = inputs.map((input) =>
-      input.id === id ? { ...input, value } : input
+  const handleInputChange = (id, newText) => {
+    const updatedInputs = inputs.map((input) => 
+      input.id === id ? { ...input, value: { ...input.value, text: newText } } : input
     );
     setInputs(updatedInputs);
+    console.log(updatedInputs);
   };
 
   const handleDeleteButtonClick = (id) => {
@@ -128,7 +129,7 @@ const Form = () => {
   };
 
 const handleSubmit = () => {
-  const updatedFormValues = inputs.map((input) => {
+  const updatedFormValues = inputs.map((input, index) => {
     // Find all objects in jsonData where id matches input.id
     const matchedObjects = jsonData.filter((item) => item.id === input.id);
 
@@ -138,8 +139,9 @@ const handleSubmit = () => {
 
     return {
       label: input.label,
-      value: {"title": input.value, "data": newData},
-      id: input.id
+      value: {"text": input.value.text, "data": newData},
+      id: input.id,
+      order: index
     };
   });
   writeUserData(updatedFormValues);
@@ -192,7 +194,7 @@ const handleSubmit = () => {
                       {input.label === "paragraph" && (
                         <textarea
                           placeholder="Enter Paragraph"
-                          value={input.value}
+                          value={input.value.text}
                           onChange={(e) => handleInputChange(input.id, e.target.value)}
                           className="main-input"
                         />
@@ -202,7 +204,7 @@ const handleSubmit = () => {
                       {input.label === "subheading" && (
                         <input
                           placeholder="Enter Subheading"
-                          value={input.value}
+                          value={input.value.text}
                           onChange={(e) => handleInputChange(input.id, e.target.value)}
                           className="main-input"
                         />

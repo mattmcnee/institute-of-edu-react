@@ -1,7 +1,7 @@
-import React, { useRef } from 'react';
+import React, { useRef, useMemo  } from 'react';
 import { Link } from 'react-router-dom';
 
-const CardScroll = ({ title, cards }) => {
+const CardScroll = ({ title, data }) => {
   const scrollContainerRef = useRef(null);
 
   const scrollLeft = () => {
@@ -15,6 +15,23 @@ const CardScroll = ({ title, cards }) => {
     const containerWidth = scrollContainer.clientWidth;
     scrollContainer.scrollBy({ left: containerWidth, behavior: 'smooth' });
   };
+
+  const parseData = (data) => {
+    if (!data) {
+      return []; // Return an empty array if data is null or undefined
+    }
+    return Object.entries(data).map(([key, sheet]) => {
+      return {
+        link: `/worksheet/${key}`,
+        content: sheet.title,
+      };
+    });
+  };
+
+// console.log(data);
+  const cards = useMemo(() => parseData(data), [data]);
+
+  
 
   return (
     <div className="card-container">
