@@ -184,42 +184,51 @@ const handleSubmit = () => {
                     {...provided.draggableProps}
                     className="input-area"
                   >
+                    {/* This div will be filled with content corresponding to its label */}
                     <div className="top-input">
-                    <label>{capitalizeFirstLetter(input.label)}</label>
-                    {input.label === "paragraph" && (
-                      <textarea
-                        placeholder="Enter Paragraph"
-                        value={input.value}
-                        onChange={(e) => handleInputChange(input.id, e.target.value)}
-                        className="main-input"
-                      />
-                    )}
-                  {input.label === "media" && (
+                      <label>{capitalizeFirstLetter(input.label)}</label>
 
-                    <MediaInput inputValue={"media"} onJsonData={handleJsonData} blockId={input.id}/>
-                    )}
-                  {input.label === "cards" && (
-                    <PairsInput inputValue={"cards"} onJsonData={handleJsonData} blockId={input.id}/>
-                  )}
+                      {/* Paragraph entry */}
+                      {input.label === "paragraph" && (
+                        <textarea
+                          placeholder="Enter Paragraph"
+                          value={input.value}
+                          onChange={(e) => handleInputChange(input.id, e.target.value)}
+                          className="main-input"
+                        />
+                      )}
+
+                      {/* Subheading entry */}
+                      {input.label === "subheading" && (
+                        <input
+                          placeholder="Enter Subheading"
+                          value={input.value}
+                          onChange={(e) => handleInputChange(input.id, e.target.value)}
+                          className="main-input"
+                        />
+                      )}
+
+                      {/* Presentation entry */}
+                      {input.label === "slides" && (
+                        <MediaInput inputValue={"media"} onJsonData={handleJsonData} blockId={input.id}/>
+                      )}
+
+                      {/* Photo entry */}
+                      {input.label === "photo"  && (
+                        <MediaInput inputValue={"media"} onJsonData={handleJsonData} blockId={input.id}/>
+                      )}
+
+                      {/* Card set entry */}
+                      {input.label === "cards" && (
+                        <PairsInput inputValue={"cards"} onJsonData={handleJsonData} blockId={input.id}/>
+                      )}
                     </div>
-                      {input.label === "photo" && (
-                        <button className="top-input" onClick={redirectToGoogleDrive}>
-                          <i className="fas fa-external-link-alt"></i>
-                        </button>
-                      )}
-                      {input.label === "slide" && (
-                        <button className="top-input" onClick={redirectToGoogleSlides}>
-                          <i className="fas fa-external-link-alt"></i>
-                        </button>
-                      )}
-                      
-                      <div className="drag-handle" {...provided.dragHandleProps}>
-                        <i className="fas fa-bars"></i>
-                      </div>
-                      <button className="top-input" onClick={() => handleDeleteButtonClick(input.id)}>
-                        <i className="fas fa-trash-alt"></i>
-                      </button>
-
+                    <div className="drag-handle" {...provided.dragHandleProps}>
+                      <i className="fas fa-bars"></i>
+                    </div>
+                    <button className="top-input" onClick={() => handleDeleteButtonClick(input.id)}>
+                      <i className="fas fa-trash-alt"></i>
+                    </button>
                   </div>
                 )}
               </Draggable>
@@ -232,8 +241,8 @@ const handleSubmit = () => {
         <select value={selectedOption} onChange={handleSelectChange}>
           <option value="subheading">Subheading</option>
           <option value="paragraph">Paragraph</option>
-          <option value="media">Photo</option>
-          <option value="media">Slideshow</option>
+          <option value="photo">Photo</option>
+          <option value="slides">Slideshow</option>
           <option value="cards">Flashcards/Quiz</option>
         </select>
         <button onClick={handleAddButtonClick}><i className="fas fa-plus"></i></button>
