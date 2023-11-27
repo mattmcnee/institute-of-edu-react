@@ -38,6 +38,16 @@ const Form = () => {
     return firebaseFormat;
   }
 
+  function convertToFirebaseFormat2(data) {
+    const firebaseFormat = {};
+    data.forEach((section, index) => {
+      // Adding an 'order' property to each section
+      const sectionWithOrder = { ...section, order: index };
+      firebaseFormat[section.id] = sectionWithOrder;
+    });
+    return firebaseFormat;
+  }
+
   // Listen for changes in the user's authentication state
   useEffect(() => {
     const auth = getAuth();
@@ -60,12 +70,13 @@ const Form = () => {
 
   const writeUserData = (data) => {
     if(currentUserId){
+      console.log(data)
       const sheetData = {
         title: "My New Sheet",
-        data: convertToFirebaseFormat(worksheetData)
+        data: convertToFirebaseFormat2(data)
       };
       console.log(currentUser);
-      console.log(convertToFirebaseFormat(worksheetData))
+      
     const newSheetRef = push(ref(database, 'sheets/'));
     set(newSheetRef, sheetData)    
     }

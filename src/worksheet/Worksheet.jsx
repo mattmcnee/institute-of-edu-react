@@ -63,6 +63,11 @@ const Worksheet = ({ setTitle }) => {
     <div className="home-page">
       <Nav title={"New Worksheet"}/>
       <div className="worksheet-container">
+{/*      <iframe className="sink"
+       frameBorder="0"
+       height="300px"  src="https://onecompiler.com/embed/python" 
+       width="80%"
+       ></iframe>*/}
         {worksheetData.map((section) => (
           <div key={section.id} className="worksheet-section">
             {section.label === 'subheading' && <h2>{section.value.text}</h2>}
