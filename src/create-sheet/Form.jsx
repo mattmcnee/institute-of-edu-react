@@ -23,6 +23,7 @@ const Form = () => {
   const [selectedOption, setSelectedOption] = useState("subheading");
   const [inputs, setInputs] = useState([]);
   const [jsonData, setJsonData] = useState([]);
+  const [title, setTitle] = useState("");
 
   const [currentUser, setCurrentUser] = useState(null);
   const [currentUserId, setCurrentUserId] = useState(null);
@@ -72,7 +73,7 @@ const Form = () => {
     if(currentUserId){
       console.log(data)
       const sheetData = {
-        title: "My New Sheet",
+        title: title,
         data: convertToFirebaseFormat2(data)
       };
       console.log(currentUser);
@@ -174,6 +175,14 @@ const handleSubmit = () => {
 
   return (
     <div className="react-form">
+    <label>Title</label>
+    <input
+      placeholder="Enter Title"
+      value={title}
+      onChange={(e) => setTitle(e.target.value)}
+      className="main-input"
+    />
+
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="inputs">
         {(provided) => (
