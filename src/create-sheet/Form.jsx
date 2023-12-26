@@ -6,6 +6,7 @@ import { getAuth, onAuthStateChanged  } from 'firebase/auth';
 import PairsInput from './PairsInput.jsx';
 import MediaInput from './MediaInput.jsx';
 import worksheetData from '/src/worksheet/worksheetData.json';
+import Popup from '/src/popup/Popup.jsx';
 import './form.css';
 
 // Configure and initialize firebase
@@ -30,7 +31,7 @@ const Form = () => {
 
   const [isDragging, setIsDragging] = useState(false);
 
-
+  const [popupState, setPopupState] = useState({ isVisible: false, x: 0, y: 0 });
 
   function convertToFirebaseFormat(data) {
     const firebaseFormat = {};
@@ -205,6 +206,19 @@ const handleMouseLeave = (id) => {
     }
   };
 
+  const handleRightClick = (event) => {
+    event.preventDefault();
+    setPopupState({
+      isVisible: true,
+      x: event.pageX,
+      y: event.pageY
+    });
+  };
+
+  const closePopup = () => {
+    setPopupState({ isVisible: false, x: 0, y: 0 });
+  };
+
   return (
     <div className="react-form">
 {/*    <label>Title</label>
@@ -228,6 +242,7 @@ const handleMouseLeave = (id) => {
                     className={snapshot.isDragging ? "input-area drag" : "input-area"}
                     onMouseEnter={() => handleMouseEnter(input.id)}
                     onMouseLeave={() => handleMouseLeave(input.id)}
+                    onContextMenu={handleRightClick}
                   >
                     
                     <div 
@@ -315,6 +330,16 @@ const handleMouseLeave = (id) => {
         <button onClick={handleSubmit}>Submit</button>
       </div>
     </DragDropContext>
+
+      <div onContextMenu={handleRightClick}>
+        {popupState.isVisible && (
+          <Popup
+            x={popupState.x}
+            y={popupState.y}
+            closeMenu={closePopup}
+          />
+        )}
+      </div>
     </div>
   );
 };

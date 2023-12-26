@@ -53,7 +53,8 @@ const MediaInput = ({ onJsonData, blockId }) => {
 }
 
   return (
-    <div className="top-input">
+  <div className="top-input">
+    <iframe src={iframeSrc} id="media-display" frameBorder="0" className="media-display"></iframe>
     <input
       type="text"
       placeholder={"https://drive.google.com/file/..."}
@@ -61,7 +62,6 @@ const MediaInput = ({ onJsonData, blockId }) => {
       value={inputValue}
       onChange={handleInputChange}
     />
-    <iframe src={iframeSrc} id="media-display" frameBorder="0" width="100%" height="300px" className="media-display"></iframe>
   </div> 
   );
 };
