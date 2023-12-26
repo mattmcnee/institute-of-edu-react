@@ -199,6 +199,7 @@ const handleMouseLeave = (id) => {
   const adjustHeight = (element) => {
     if (element) {
       element.style.height = 'auto';
+      console.log(element.scrollHeight)
       element.style.height = `${element.scrollHeight}px`;       
 
     }
@@ -247,6 +248,7 @@ const handleMouseLeave = (id) => {
                         <textarea
                           placeholder="Text"
                           value={input.value.text}
+                          rows="1"
                           onChange={(e) => {
                             handleInputChange(input.id, e.target.value);
                             adjustHeight(e.target);

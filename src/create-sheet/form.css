@@ -6,6 +6,7 @@
 
 .react-form{
 	padding-top: 10px;
+	margin-top: 20px;
 	font-size: 18px;
 }
 
@@ -34,7 +35,8 @@
 	border-radius: 6px;
 	outline: none;
 	font-family: inherit;
-	margin: 0 10px;
+	margin: 3px 10px 0 10px;
+	background-color: transparent;
 }
 
 .react-form .input-area .main-input.subheading{
@@ -45,7 +47,10 @@
 	height: auto;
 /*	min-height: 100%;*/
 	resize: none;
-	padding-top: 12px;
+/*	padding-top: 12px;*/
+/*	height: 30px;*/
+	overflow-y: hidden;
+	box-sizing: border-box;
 /*	height: 16px !important;*/
 }
 
@@ -187,7 +192,7 @@
 	padding: 5px 4px;
 	border-radius: 6px;
 	border: 1px solid var(--form-outline);
-	background-color: white;
+	background-color: transparent;
 	margin: 10px 20px;
 }
 
@@ -203,7 +208,7 @@
 	border-radius: 0;
 	border: none;
 	border-bottom: 1px solid var(--form-outline);
-	background-color: white;
+	background-color: transparent;
 	flex-grow: 1;
 	width: 100%;
 	text-align: center;
@@ -221,7 +226,7 @@
 	padding: 8px 6px;
 	border-radius: 6px;
 	border: none;
-	background-color: white;
+	background-color: transparent;
 	width: 60px;
 }
 
