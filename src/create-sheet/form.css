@@ -9,7 +9,7 @@
 }
 
 .react-form .input-area{
-	border: 1px solid var(--form-outline-bold);
+/*	border: 1px solid var(--form-outline-bold);*/
 	border-radius: 6px;
 	display: flex;
 	position: relative;
@@ -90,13 +90,43 @@
   color: #555;
 }
 
-.react-form .input-area button.top-input, .react-form .add-input button{
+
+
+/* Item buttons */
+
+.react-form .input-area .button-options{
+/*	display: flex;
+	flex-direction: row;*/
+	height: fit-content;
+	position: relative;
+}
+
+.react-form .input-area .button-options .hovered{
+	display: flex;
+	flex-direction: row;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.react-form .input-area button{
 	border: none;
 	border-top-right-radius: 6px;
 	border-bottom-right-radius: 6px;
-	border-left: 1px solid var(--form-outline-bold);
-	background-color: white;
+	background-color: transparent;
 	padding: 0 15px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-grow: 0;
+}
+
+.react-form .button-options button, .react-form .button-options div{
+	border: none;
+	border-top-right-radius: 6px;
+	border-bottom-right-radius: 6px;
+	background-color: transparent;
+	padding: 0 5px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -111,7 +141,7 @@
 	padding: 5px 4px;
 	display: flex;
 	align-items: center;
-	border-left: 1px solid var(--form-outline-bold);
+/*	border-left: 1px solid var(--form-outline-bold);*/
 	justify-content: center;
 }
 
@@ -121,7 +151,7 @@
 
 .react-form .input-area .drag-handle i{
 	flex-grow: 1;
-	margin: 0 10px ;
+/*	margin: 0 10px ;*/
 }
 
 .react-form .add-input{

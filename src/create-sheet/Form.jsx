@@ -111,10 +111,25 @@ const Form = () => {
       id: new Date().getTime(),
       label: selectedOption,
       value: { text: "" },
+      isHovered: false,
     });
     setInputs(newInputs);
     console.log("Selected Option:", selectedOption);
   };
+
+
+  const handleMouseEnter = (id) => {
+    setInputs(inputs.map(input => 
+      input.id === id ? { ...input, isHovered: true } : input
+    ));
+  };
+
+  const handleMouseLeave = (id) => {
+    setInputs(inputs.map(input => 
+      input.id === id ? { ...input, isHovered: false } : input
+    ));
+  };
+
 
   const handleInputChange = (id, newText) => {
     const updatedInputs = inputs.map((input) => 
@@ -195,6 +210,31 @@ const handleSubmit = () => {
                     {...provided.draggableProps}
                     className="input-area"
                   >
+                    <div className="button-options"
+                      onMouseEnter={() => handleMouseEnter(input.id)}
+                      onMouseLeave={() => handleMouseLeave(input.id)}
+                    >
+                    {input.isHovered ? (
+                      <div className="hovered">
+                      <div className="drag-handle" {...provided.dragHandleProps}>
+                        <i className="fas fa-bars"></i>
+                      </div>
+                      <button className="change-button">
+                        <i className="fas fa-exchange-alt"></i>
+                      </button>
+                      <button className="top-input" onClick={() => handleDeleteButtonClick(input.id)}>
+                        <i className="fas fa-trash-alt"></i>
+                      </button>
+                      </div>
+                    ) : (
+                      // Render the elements for the non-hover state
+                      <div className="not-hovered">
+                      <button className="edit-button">
+                        <i className="fas fa-edit"></i>
+                      </button>
+                      </div>
+                    )}
+                    </div>
                     {/* This div will be filled with content corresponding to its label */}
                     <div className="top-input">
                       <label>{capitalizeFirstLetter(input.label)}</label>
@@ -234,12 +274,6 @@ const handleSubmit = () => {
                         <PairsInput inputValue={"cards"} onJsonData={handleJsonData} blockId={input.id}/>
                       )}
                     </div>
-                    <div className="drag-handle" {...provided.dragHandleProps}>
-                      <i className="fas fa-bars"></i>
-                    </div>
-                    <button className="top-input" onClick={() => handleDeleteButtonClick(input.id)}>
-                      <i className="fas fa-trash-alt"></i>
-                    </button>
                   </div>
                 )}
               </Draggable>
@@ -250,6 +284,7 @@ const handleSubmit = () => {
       </Droppable>
       <div className="add-input">
         <select value={selectedOption} onChange={handleSelectChange}>
+          {/*<option value="heading">Heading</option>*/}
           <option value="subheading">Subheading</option>
           <option value="paragraph">Paragraph</option>
           <option value="photo">Photo</option>
