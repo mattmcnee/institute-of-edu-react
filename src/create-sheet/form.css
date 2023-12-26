@@ -14,8 +14,12 @@
 	display: flex;
 	flex-direction: row;
 	position: relative;
-	margin: 0px 20px 5px 20px;
+	margin: 0px 20px 0 20px;
 	background-color: white;
+}
+
+.react-form .input-area.drag{
+	border: 1px solid grey;
 }
 
 .react-form .input-area .top-input{
@@ -41,6 +45,8 @@
 	height: auto;
 /*	min-height: 100%;*/
 	resize: none;
+	padding-top: 12px;
+/*	height: 16px !important;*/
 }
 
 .react-form .input-area label{

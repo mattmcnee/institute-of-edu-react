@@ -199,7 +199,8 @@ const handleMouseLeave = (id) => {
   const adjustHeight = (element) => {
     if (element) {
       element.style.height = 'auto';
-      element.style.height = `${element.scrollHeight}px`;
+      element.style.height = `${element.scrollHeight}px`;       
+
     }
   };
 
@@ -223,7 +224,7 @@ const handleMouseLeave = (id) => {
                   <div
                     ref={provided.innerRef}
                     {...provided.draggableProps}
-                    className="input-area"
+                    className={snapshot.isDragging ? "input-area drag" : "input-area"}
                     onMouseEnter={() => handleMouseEnter(input.id)}
                     onMouseLeave={() => handleMouseLeave(input.id)}
                   >
@@ -244,7 +245,7 @@ const handleMouseLeave = (id) => {
                       {/* Paragraph entry */}
                       {input.label === "paragraph" && (
                         <textarea
-                          placeholder="Paragraph"
+                          placeholder="Text"
                           value={input.value.text}
                           onChange={(e) => {
                             handleInputChange(input.id, e.target.value);
