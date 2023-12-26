@@ -175,13 +175,13 @@ const handleSubmit = () => {
 
   return (
     <div className="react-form">
-    <label>Title</label>
+{/*    <label>Title</label>
     <input
       placeholder="Enter Title"
       value={title}
       onChange={(e) => setTitle(e.target.value)}
       className="main-input"
-    />
+    />*/}
 
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="inputs">
