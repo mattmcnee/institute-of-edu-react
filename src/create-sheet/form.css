@@ -95,18 +95,8 @@
 /* Item buttons */
 
 .react-form .input-area .button-options{
-/*	display: flex;
-	flex-direction: row;*/
-	height: fit-content;
-	position: relative;
-}
-
-.react-form .input-area .button-options .hovered{
 	display: flex;
 	flex-direction: row;
-	position: absolute;
-	top: 0;
-	left: 0;
 }
 
 .react-form .input-area button{

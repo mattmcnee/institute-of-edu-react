@@ -28,6 +28,9 @@ const Form = () => {
   const [currentUser, setCurrentUser] = useState(null);
   const [currentUserId, setCurrentUserId] = useState(null);
 
+  const [isDragging, setIsDragging] = useState(false);
+
+
 
   function convertToFirebaseFormat(data) {
     const firebaseFormat = {};
@@ -117,20 +120,6 @@ const Form = () => {
     console.log("Selected Option:", selectedOption);
   };
 
-
-  const handleMouseEnter = (id) => {
-    setInputs(inputs.map(input => 
-      input.id === id ? { ...input, isHovered: true } : input
-    ));
-  };
-
-  const handleMouseLeave = (id) => {
-    setInputs(inputs.map(input => 
-      input.id === id ? { ...input, isHovered: false } : input
-    ));
-  };
-
-
   const handleInputChange = (id, newText) => {
     const updatedInputs = inputs.map((input) => 
       input.id === id ? { ...input, value: { ...input.value, text: newText } } : input
@@ -164,6 +153,19 @@ const handleSubmit = () => {
   console.log("Form Values:", updatedFormValues);
 };
 
+const handleMouseEnter = (id) => {
+  setInputs(inputs.map(input => 
+    input.id === id ? { ...input, isHovered: true } : input
+  ));
+};
+
+const handleMouseLeave = (id) => {
+  setInputs(inputs.map(input => 
+    input.id === id ? { ...input, isHovered: false } : input
+  ));
+};
+
+
   function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
@@ -176,7 +178,12 @@ const handleSubmit = () => {
     window.open("https://slides.google.com", "_blank"); // Opens Google Slides in a new tab
   };
 
+  const onDragStart = () => {
+    setIsDragging(true);
+  };
+
   const onDragEnd = (result) => {
+    setIsDragging(false);
     if (!result.destination) {
       return;
     }
@@ -198,43 +205,37 @@ const handleSubmit = () => {
       className="main-input"
     />*/}
 
-    <DragDropContext onDragEnd={onDragEnd}>
+    <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
       <Droppable droppableId="inputs">
         {(provided) => (
           <div {...provided.droppableProps} ref={provided.innerRef}>
             {inputs.map((input, index) => (
               <Draggable key={input.id} draggableId={input.id.toString()} index={index}>
-                {(provided) => (
+                {(provided, snapshot) => (
                   <div
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     className="input-area"
+                    onMouseEnter={() => handleMouseEnter(input.id)}
+                    onMouseLeave={() => handleMouseLeave(input.id)}
                   >
-                    <div className="button-options"
-                      onMouseEnter={() => handleMouseEnter(input.id)}
-                      onMouseLeave={() => handleMouseLeave(input.id)}
-                    >
-                    {input.isHovered ? (
-                      <div className="hovered">
-                      <div className="drag-handle" {...provided.dragHandleProps}>
-                        <i className="fas fa-bars"></i>
-                      </div>
-                      <button className="change-button">
-                        <i className="fas fa-exchange-alt"></i>
-                      </button>
-                      <button className="top-input" onClick={() => handleDeleteButtonClick(input.id)}>
-                        <i className="fas fa-trash-alt"></i>
-                      </button>
-                      </div>
-                    ) : (
-                      // Render the elements for the non-hover state
-                      <div className="not-hovered">
-                      <button className="edit-button">
-                        <i className="fas fa-edit"></i>
-                      </button>
-                      </div>
-                    )}
-                    </div>
+                    {
+                      (input.isHovered && !isDragging) || snapshot.isDragging ? (
+                        <div className="button-options">
+                          <div className="drag-handle" {...provided.dragHandleProps}>
+                            <i className="fas fa-bars"></i>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="button-options">
+                          <div className="drag-handle" {...provided.dragHandleProps}>
+                            {/* Inline styles in JSX should be an object */}
+                            <i className="fas fa-bars" style={{ color: 'transparent' }}></i>
+                          </div>
+                        </div>
+                      )
+                    }
+               
                     {/* This div will be filled with content corresponding to its label */}
                     <div className="top-input">
                       <label>{capitalizeFirstLetter(input.label)}</label>
@@ -274,6 +275,18 @@ const handleSubmit = () => {
                         <PairsInput inputValue={"cards"} onJsonData={handleJsonData} blockId={input.id}/>
                       )}
                     </div>
+                    {
+                      (input.isHovered && !isDragging) || snapshot.isDragging  ? (
+                        <div className="button-options">
+                          <button className="edit-button">
+                            <i className="fas fa-edit"></i>
+                          </button>
+                          <button className="top-input" onClick={() => handleDeleteButtonClick(input.id)}>
+                            <i className="fas fa-trash-alt"></i>
+                          </button>
+                        </div>
+                      ) : null
+                    }
                   </div>
                 )}
               </Draggable>
