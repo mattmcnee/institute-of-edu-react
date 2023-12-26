@@ -3,14 +3,14 @@
   --form-outline-bold: #888;
 }
 
-.react-form{
+.new-worksheet-form{
 	padding-top: 10px;
 	margin-top: 20px;
 	font-size: 18px;
 	width: 70%;
 }
 
-.react-form .input-area{
+.new-worksheet-form .input-area{
 	border-radius: 6px;
 	display: flex;
 	flex-direction: row;
@@ -19,24 +19,17 @@
 	background-color: white;
 }
 
-.react-form .input-area.drag{
+.new-worksheet-form .input-area.drag{
 	border: 1px solid grey;
 }
 
-.react-form .input-area .top-input{
+.new-worksheet-form .input-area .input-container{
 	display: flex;
 	flex-grow: 1;
 	flex-direction: column;
 }
 
-.react-form .input-area .top-input iframe.media-display{
-	margin: 10px 12px;
-	width: calc(100% - 24px);
-	height: 340px;
-	border-radius: 6px;
-}
-
-.react-form .input-area .main-input{
+.new-worksheet-form .input-area .main-input{
 	flex-grow: 1;
 	border: none;
 	border-radius: 6px;
@@ -46,100 +39,48 @@
 	background-color: transparent;
 }
 
-.react-form .input-area .main-input.subheading{
+.new-worksheet-form .input-area input.main-input.subheading{
 	font-size: 25px;
 }
 
-.react-form .input-area textarea.main-input{
+.new-worksheet-form .input-area textarea.main-input{
 	height: auto;
 	resize: none;
 	box-sizing: border-box;
 }
 
-.react-form .input-area label{
-/*	font-size: 0.8em;*/
-	color: #333;
-	padding: 6px 8px;
-}
-
-.react-form .input-area .extra-input{
-	box-sizing: border-box;
-	width: 100%;
-	min-height: 1.5em;
-	max-height: 12em;
-	outline: none;
-	resize: none;
-	border-radius: 0;
-	border: none;
-	flex-grow: 0;
-	margin: 0;
-}
-
-/*.react-form .extra-input-holder .textarea{
-	width: 100%;
-	flex-grow: 1;
-}
-
-.react-form .extra-input-holder .textarea textarea{
-	padding: 3px 4px;
-	border-radius: 6px;
-}*/
-
-/*.react-form .input-area .extra-input-holder{
-	display: flex;
-	flex-direction: row;
-	border: 1px solid var(--form-outline-bold);
-	border-radius: 6px;
-	margin: 0 20px 20px 20px;
-	background-color: white;
-}
-
-.react-form .extra-input-gap{
-	width: 60px;
-	position: relative;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	border-left: 1px solid var(--form-outline);
-	border-right: 1px solid var(--form-outline);
-}*/
-
-.react-form .input-area textarea::placeholder, .react-form .input-area input::placeholder{
+.new-worksheet-form .input-area textarea.main-input::placeholder, 
+.new-worksheet-form .input-area input.main-input::placeholder{
   color: #555;
 }
 
-
+.new-worksheet-form .input-area iframe.media-display{
+	margin: 10px 12px;
+	width: calc(100% - 24px);
+	height: 340px;
+	border-radius: 6px;
+}
 
 /* Item buttons */
 
-.react-form .input-area .button-options{
+.new-worksheet-form .input-area .button-options{
 	display: flex;
 	flex-direction: row;
 }
 
-.react-form .input-area button{
-	border: none;
-	border-top-right-radius: 6px;
-	border-bottom-right-radius: 6px;
-	background-color: transparent;
-	padding: 0 15px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-grow: 0;
-}
-
-.react-form .button-options, .react-form .button-options i{
+.new-worksheet-form .button-options, 
+.new-worksheet-form .button-options i{
   transition: color 0.1s ease-in-out;
 }
 
-.react-form .button-options.transparent, .react-form .button-options.transparent i{
+.new-worksheet-form .button-options.transparent, 
+.new-worksheet-form .button-options.transparent i{
 	color: transparent;
 	transition: color 0.2s ease-in-out;
 }
 
-.react-form .button-options button, .react-form .button-options div{
+.new-worksheet-form .button-options button, 
+.new-worksheet-form .button-options div{
 	border: none;
 	border-top-right-radius: 6px;
 	border-bottom-right-radius: 6px;
@@ -151,26 +92,20 @@
 	flex-grow: 0;
 }
 
-.react-form .input-area button:hover, .react-form .add-input button:hover, .react-form .add-input select:hover{
+.new-worksheet-form .input-area button:hover, 
+.new-worksheet-form .add-input button:hover, 
+.new-worksheet-form .add-input select:hover,
+.new-worksheet-form .submit-form button:hover,
+.new-worksheet-form .new-input-select button:hover{
 	cursor: pointer;
 }
 
-/*.react-form .input-area .drag-handle{
-	padding: 5px 4px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-*/
-.react-form .input-area .drag-handle:hover{
+.new-worksheet-form .input-area .drag-handle:hover{
 	cursor: grab;
 }
 
-/*.react-form .input-area .drag-handle i{
-	flex-grow: 1;
-}*/
 
-.react-form .add-input{
+.new-worksheet-form .add-input{
 	width: 50%;
 	display: flex;
 	margin: 10px 20px;
@@ -178,16 +113,16 @@
 	border: 1px solid var(--form-outline);
 }
 
-.react-form .add-input select{
+.new-worksheet-form .add-input select{
 	flex-grow: 1;
 	border: none;
 	border-radius: 6px;
 	outline: none;
 	padding: 5px 4px;
-/*	font-size: 0.8em;*/
+	background-color: transparent;
 }
 
-.react-form .submit-form button{
+.new-worksheet-form .submit-form button{
 	display: flex;
 	padding: 5px 4px;
 	border-radius: 6px;
@@ -196,59 +131,34 @@
 	margin: 10px 20px;
 }
 
-.react-form .submit-form button:hover{
-	cursor: pointer;
-}
-
-.react-form .extra-input-gap button, .react-form .extra-input-gap .drag-handle{
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	padding: 8px 6px;
-	border-radius: 0;
-	border: none;
-	border-bottom: 1px solid var(--form-outline);
-	background-color: transparent;
-	flex-grow: 1;
-	width: 100%;
-	text-align: center;
-	box-sizing: border-box;
-}
-
-.react-form .extra-input-gap button:last-child{
-	border: none;
-}
-
-.react-form .extra-input-add button{
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	padding: 8px 6px;
+.new-worksheet-form .new-input-select button{
 	border-radius: 6px;
-	border: none;
+	padding: 5px 7px;
 	background-color: transparent;
-	width: 60px;
+	border: 1px solid var(--form-outline);
 }
 
-.react-form .extra-input-add{
+.new-worksheet-form .new-input-select .add-input button{
+	border: none;
+}
+
+.new-worksheet-form .form-options{
 	display: flex;
-	align-items: center;
+	flex-direction: row;
+	width: calc(100% - 80px);
+	margin: 30px 40px 10px 40px;
+	border-top: 1px solid grey;
+}
+
+.new-worksheet-form .form-options div{
+	flex-grow: 1;
+	display: flex;
 	justify-content: center;
-	width: 100%;
-	border-top: 1px solid var(--form-outline-bold);
 }
 
-.react-form .drop-scroll{
-	max-height: 340px;
-	overflow-y: scroll;
-}
-
-.react-form .rotate-button.rotated i{
-	transform: rotate(180deg);
-	transition: transform 0.5s ease-in-out;
-}
-
-.react-form .rotate-button:not(.rotated) i{
-	transform: rotate(0deg);
-	transition: transform 0.5s ease-in-out;
+.new-input-select{
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	margin-top: 20px;
 }

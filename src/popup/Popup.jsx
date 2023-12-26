@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import './ContextMenu.css'; // Import CSS for styling
 
-const Popup = ({ x, y, closeMenu }) => {
+const Popup = ({ x, y, closeMenu}) => {
   const options = ["Subheading", "Text", "Photo"]; // Add more options as needed
 
   useEffect(() => {

@@ -30,6 +30,7 @@ const Form = () => {
   const [currentUserId, setCurrentUserId] = useState(null);
 
   const [isDragging, setIsDragging] = useState(false);
+  const [addNew, setAddNew] = useState(false);
 
   const [popupState, setPopupState] = useState({ isVisible: false, x: 0, y: 0 });
 
@@ -120,6 +121,7 @@ const Form = () => {
     });
     setInputs(newInputs);
     console.log("Selected Option:", selectedOption);
+    setAddNew(false);
   };
 
   const handleInputChange = (id, newText) => {
@@ -219,8 +221,15 @@ const handleMouseLeave = (id) => {
     setPopupState({ isVisible: false, x: 0, y: 0 });
   };
 
+
+  const addNewInput = () => {
+    setAddNew(true);
+    console.log(addNew)
+    console.log("HIII")
+  };
+
   return (
-    <div className="react-form">
+    <div className="new-worksheet-form">
 {/*    <label>Title</label>
     <input
       placeholder="Enter Title"
@@ -255,7 +264,7 @@ const handleMouseLeave = (id) => {
 
                
                     {/* This div will be filled with content corresponding to its label */}
-                    <div className="top-input">
+                    <div className="input-container">
                       {/* <label>{capitalizeFirstLetter(input.label)}</label>*/}
 
                       {/* Paragraph entry */}
@@ -315,19 +324,30 @@ const handleMouseLeave = (id) => {
           </div>
         )}
       </Droppable>
-      <div className="add-input">
-        <select value={selectedOption} onChange={handleSelectChange}>
-          {/*<option value="heading">Heading</option>*/}
-          <option value="subheading">Subheading</option>
-          <option value="paragraph">Paragraph</option>
-          <option value="photo">Photo</option>
-          <option value="slides">Slideshow</option>
-          <option value="cards">Flashcards/Quiz</option>
-        </select>
-        <button onClick={handleAddButtonClick}><i className="fas fa-plus"></i></button>
+      <div className="new-input-select">
+      {!addNew ? (
+          <button onClick={addNewInput}><i className="fas fa-plus"></i></button>
+      ) : (
+        <div className="add-input">
+          <select value={selectedOption} onChange={handleSelectChange}>
+            {/*<option value="heading">Heading</option>*/}
+            <option value="subheading">Subheading</option>
+            <option value="paragraph">Paragraph</option>
+            <option value="photo">Photo</option>
+            <option value="slides">Slideshow</option>
+            <option value="cards">Flashcards/Quiz</option>
+          </select>
+          <button onClick={handleAddButtonClick}><i className="fas fa-plus"></i></button>
+        </div>
+      )}
       </div>
+      <div className="form-options">
+        <div className="submit-form">
+          <button>Save Draft</button>
+        </div>
       <div className="submit-form">
-        <button onClick={handleSubmit}>Submit</button>
+          <button onClick={handleSubmit}>Submit</button>
+        </div>
       </div>
     </DragDropContext>
 
