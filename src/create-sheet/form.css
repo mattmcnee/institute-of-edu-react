@@ -6,14 +6,15 @@
 
 .react-form{
 	padding-top: 10px;
+	font-size: 18px;
 }
 
 .react-form .input-area{
-/*	border: 1px solid var(--form-outline-bold);*/
 	border-radius: 6px;
 	display: flex;
+	flex-direction: row;
 	position: relative;
-	margin: 0px 20px 20px 20px;
+	margin: 0px 20px 5px 20px;
 	background-color: white;
 }
 
@@ -28,17 +29,22 @@
 	border: none;
 	border-radius: 6px;
 	outline: none;
-	margin: 0 0 5px 10px;
 	font-family: inherit;
+	margin: 0 10px;
+}
+
+.react-form .input-area .main-input.subheading{
+	font-size: 25px;
 }
 
 .react-form .input-area textarea.main-input{
-	height: 92px;
+	height: auto;
+/*	min-height: 100%;*/
 	resize: none;
 }
 
 .react-form .input-area label{
-	font-size: 0.8em;
+/*	font-size: 0.8em;*/
 	color: #333;
 	padding: 6px 8px;
 }
@@ -56,7 +62,7 @@
 	margin: 0;
 }
 
-.react-form .extra-input-holder .textarea{
+/*.react-form .extra-input-holder .textarea{
 	width: 100%;
 	flex-grow: 1;
 }
@@ -64,9 +70,9 @@
 .react-form .extra-input-holder .textarea textarea{
 	padding: 3px 4px;
 	border-radius: 6px;
-}
+}*/
 
-.react-form .input-area .extra-input-holder{
+/*.react-form .input-area .extra-input-holder{
 	display: flex;
 	flex-direction: row;
 	border: 1px solid var(--form-outline-bold);
@@ -84,7 +90,7 @@
 	justify-content: center;
 	border-left: 1px solid var(--form-outline);
 	border-right: 1px solid var(--form-outline);
-}
+}*/
 
 .react-form .input-area textarea::placeholder, .react-form .input-area input::placeholder{
   color: #555;
@@ -109,6 +115,15 @@
 	align-items: center;
 	justify-content: center;
 	flex-grow: 0;
+}
+
+.react-form .button-options, .react-form .button-options i{
+  transition: color 0.1s ease-in-out;
+}
+
+.react-form .button-options.transparent, .react-form .button-options.transparent i{
+	color: transparent;
+	transition: color 0.2s ease-in-out;
 }
 
 .react-form .button-options button, .react-form .button-options div{
@@ -158,7 +173,7 @@
 	border-radius: 6px;
 	outline: none;
 	padding: 5px 4px;
-	font-size: 0.8em;
+/*	font-size: 0.8em;*/
 }
 
 .react-form .submit-form button{

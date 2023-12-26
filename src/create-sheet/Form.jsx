@@ -109,6 +109,7 @@ const Form = () => {
   };
 
   const handleAddButtonClick = () => {
+    // const newInputs = inputs.map(input => ({ ...input, isHovered: false }));
     const newInputs = [...inputs];
     newInputs.push({
       id: new Date().getTime(),
@@ -155,7 +156,7 @@ const handleSubmit = () => {
 
 const handleMouseEnter = (id) => {
   setInputs(inputs.map(input => 
-    input.id === id ? { ...input, isHovered: true } : input
+    ({ ...input, isHovered: input.id === id })
   ));
 };
 
@@ -195,6 +196,13 @@ const handleMouseLeave = (id) => {
     setInputs(reorderedInputs);
   };
 
+  const adjustHeight = (element) => {
+    if (element) {
+      element.style.height = 'auto';
+      element.style.height = `${element.scrollHeight}px`;
+    }
+  };
+
   return (
     <div className="react-form">
 {/*    <label>Title</label>
@@ -219,33 +227,29 @@ const handleMouseLeave = (id) => {
                     onMouseEnter={() => handleMouseEnter(input.id)}
                     onMouseLeave={() => handleMouseLeave(input.id)}
                   >
-                    {
-                      (input.isHovered && !isDragging) || snapshot.isDragging ? (
-                        <div className="button-options">
-                          <div className="drag-handle" {...provided.dragHandleProps}>
-                            <i className="fas fa-bars"></i>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="button-options">
-                          <div className="drag-handle" {...provided.dragHandleProps}>
-                            {/* Inline styles in JSX should be an object */}
-                            <i className="fas fa-bars" style={{ color: 'transparent' }}></i>
-                          </div>
-                        </div>
-                      )
-                    }
+                    
+                    <div 
+                      className={(input.isHovered && !isDragging) || snapshot.isDragging ? "button-options" : "button-options transparent"}
+                    >
+                      <div className="drag-handle" {...provided.dragHandleProps}>
+                        <i className="fas fa-bars"></i>
+                      </div>
+                    </div>
+
                
                     {/* This div will be filled with content corresponding to its label */}
                     <div className="top-input">
-                      <label>{capitalizeFirstLetter(input.label)}</label>
+                      {/* <label>{capitalizeFirstLetter(input.label)}</label>*/}
 
                       {/* Paragraph entry */}
                       {input.label === "paragraph" && (
                         <textarea
-                          placeholder="Enter Paragraph"
+                          placeholder="Paragraph"
                           value={input.value.text}
-                          onChange={(e) => handleInputChange(input.id, e.target.value)}
+                          onChange={(e) => {
+                            handleInputChange(input.id, e.target.value);
+                            adjustHeight(e.target);
+                          }}                        
                           className="main-input"
                         />
                       )}
@@ -253,10 +257,10 @@ const handleMouseLeave = (id) => {
                       {/* Subheading entry */}
                       {input.label === "subheading" && (
                         <input
-                          placeholder="Enter Subheading"
+                          placeholder="Subheading"
                           value={input.value.text}
                           onChange={(e) => handleInputChange(input.id, e.target.value)}
-                          className="main-input"
+                          className="main-input subheading"
                         />
                       )}
 
@@ -275,18 +279,16 @@ const handleMouseLeave = (id) => {
                         <PairsInput inputValue={"cards"} onJsonData={handleJsonData} blockId={input.id}/>
                       )}
                     </div>
-                    {
-                      (input.isHovered && !isDragging) || snapshot.isDragging  ? (
-                        <div className="button-options">
-                          <button className="edit-button">
-                            <i className="fas fa-edit"></i>
-                          </button>
-                          <button className="top-input" onClick={() => handleDeleteButtonClick(input.id)}>
-                            <i className="fas fa-trash-alt"></i>
-                          </button>
-                        </div>
-                      ) : null
-                    }
+                    <div 
+                      className={(input.isHovered && !isDragging) || snapshot.isDragging ? "button-options" : "button-options transparent"}
+                    >
+                      <button className="edit-button">
+                        <i className="fas fa-edit"></i>
+                      </button>
+                      <button className="delete-button" onClick={() => handleDeleteButtonClick(input.id)}>
+                        <i className="fas fa-trash-alt"></i>
+                      </button>
+                    </div>
                   </div>
                 )}
               </Draggable>
