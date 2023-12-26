@@ -3,11 +3,17 @@ import { useParams } from 'react-router-dom';
 import Game from '/src/three/Game';
 import { getDatabase, ref, get } from 'firebase/database';
 import Nav from '/src/Nav';
+import hljs from 'highlight.js';
+import 'highlight.js/styles/default.css';
 
 const Worksheet = ({ setTitle }) => {
   const [worksheetData, setWorksheetData] = useState([]);
   const [loading, setLoading] = useState(true);
   let { id } = useParams();
+
+  useEffect(() => {
+    hljs.highlightAll();
+  }, [worksheetData]);
 
   useEffect(() => {
     setTitle("Game Worksheet");
@@ -62,6 +68,15 @@ const Worksheet = ({ setTitle }) => {
     );
   }
 
+  const tweenCode = `
+const tween = KUTE.fromTo(
+  '#blob1',
+  { path: '#blob1' },
+  { path: '#blob2' },
+  { repeat: 999, duration: 3000, yoyo: true }
+).start();
+`;
+
   return (
     <div className="home-page">
       <Nav title={"New Worksheet"}/>
@@ -85,6 +100,9 @@ const Worksheet = ({ setTitle }) => {
           </div>
         ))}
       </div>
+      <pre><code className="language-javascript">
+        {tweenCode}
+      </code></pre>
     </div>
   );
 };
