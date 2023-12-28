@@ -121,10 +121,40 @@ const Form = () => {
       label: selectedOption,
       value: { text: "" },
       isHovered: false,
-      isTopHovered: false,
+      newBelow: false,
     });
     setInputs(newInputs);
     console.log("Selected Option:", selectedOption);
+    setAddNew(false);
+  };
+
+  const handleAddButtonClickBelow = (index) => {
+    // Create the new input object
+    const newInput = {
+      id: new Date().getTime(), // Unique ID based on the current time
+      label: selectedOption,
+      value: { text: "" },
+      isHovered: false,
+      newBelow: false,
+    };
+
+    // Create a new array with the new input inserted at the specified index
+    // and set 'newBelow' to false for the input at the index
+    const newInputs = [
+      ...inputs.slice(0, index), // Elements before and including the index
+      { ...inputs[index], newBelow: false }, // Update the current item at index
+      newInput, // New input element
+      ...inputs.slice(index + 1) // Elements after the index
+    ];
+
+    setInputs(newInputs); // Update the state with the new inputs array
+    console.log("Selected Option:", selectedOption);
+    console.log("New Inputs:", newInputs);
+  };
+
+
+
+  const handleCancelButtonClick = () => {
     setAddNew(false);
   };
 
@@ -195,39 +225,30 @@ const Form = () => {
     setInputs(reorderedInputs);
   };
 
+  const addNewInputBelow = (index) => {
+    // Create a new array with the updated item
+    const newInputs = [...inputs];
+    newInputs[index] = { ...newInputs[index], newBelow: true };
+
+    setInputs(newInputs);
+  };
+
+  const cancelNewInputBelow = (index) => {
+    // Create a new array with the updated item
+    const newInputs = [...inputs];
+    newInputs[index] = { ...newInputs[index], newBelow: false };
+
+    setInputs(newInputs);
+  };
+
+
+  const cancelNewInput = () => {
+    setAddNew(false);
+  };
+
   const addNewInput = () => {
     setAddNew(true);
-    console.log(addNew)
-    console.log("HIII")
   };
-
-  const handleMouseMove = (event, inputId) => {
-    const element = event.currentTarget;
-    const rect = element.getBoundingClientRect();
-    const mouseY = event.clientY;
-    const elementMidPoint = rect.top + rect.height / 2;
-
-    if (mouseY < elementMidPoint) {
-      console.log(`Mouse is in the upper half of input ${inputId}`);
-      // Additional logic for the upper half
-      const currentIndex = inputs.findIndex(input => input.id === inputId);
-
-      if (currentIndex > 0 && !inputs[currentIndex - 1].isHovered) {
-        // Update the state immutably
-        setInputs(inputs.map((input, index) => {
-          if (index === currentIndex - 1) {
-            return { ...input, isHovered: true };
-          }
-          return input;
-        }));
-    } else {
-      console.log(`Mouse is in the lower half of input ${inputId}`);
-
-      }
-      // Additional logic for the lower half
-    }
-  };
-
 
   const isAboveInputHovered = (currentInputId) => {
   // Find the index of the current input
@@ -269,7 +290,6 @@ const Form = () => {
                     {...provided.draggableProps}
                     onMouseEnter={() => handleMouseEnter(input.id)}
                     onMouseLeave={() => handleMouseLeave(input.id)}
-                    onMouseMove={(e) => handleMouseMove(e, input.id)}
                   >
                   <div
                     className={snapshot.isDragging ? "worksheet-section drag" : "worksheet-section"}
@@ -301,14 +321,9 @@ const Form = () => {
                         <TitleInput onJsonData={handleJsonData} blockId={input.id}/>
                       )}
 
-                      {/* Presentation entry */}
-                      {input.label === "media" && (
-                        <MediaInput inputValue={"media"} onJsonData={handleJsonData} blockId={input.id}/>
-                      )}
-
-                      {/* Photo entry */}
-                      {input.label === "photo"  && (
-                        <MediaInput inputValue={"media"} onJsonData={handleJsonData} blockId={input.id}/>
+                      {/* Media entry */}
+                      {input.label === "slideshow" || input.label === "photo" || input.label === "video" && (
+                        <MediaInput inputType={input.label} onJsonData={handleJsonData} blockId={input.id}/>
                       )}
 
                       {/* Card set entry */}
@@ -319,33 +334,34 @@ const Form = () => {
                     <div 
                       className={(input.isHovered && !isDragging) || snapshot.isDragging ? "button-options" : "button-options transparent"}
                     >
-                      <button className="edit-button">
-                        <i className="fas fa-edit"></i>
+                      <button onClick={() => addNewInputBelow(index)}>
+                        <i className="fas fa-plus"></i>
                       </button>
+                      {/* <button className="edit-button">
+                        <i className="fas fa-edit"></i>
+                      </button>*/}
                       <button className="delete-button" onClick={() => handleDeleteButtonClick(input.id)}>
                         <i className="fas fa-trash-alt"></i>
                       </button>
                     </div>
                   </div>
             {
-                ((input.isHovered && !isDragging)) && (
+                (input.newBelow && !isDragging) && (
                     <div className="new-input-select">
-                        {!addNew ? (
-                            <button onClick={addNewInput}><i className="fas fa-plus"></i></button>
-                        ) : (
                             <div className="add-input">
                                 <select value={selectedOption} onChange={handleSelectChange}>
                                     {/*<option value="heading">Heading</option>*/}
                                     <option value="subheading">Subheading</option>
                                     <option value="paragraph">Paragraph</option>
-                                    <option value="media">Photo</option>
-                                    <option value="slideshow">Slideshow</option> {/* Changed the value to "slideshow" */}
+                                    <option value="photo">Photo</option>
+                                    <option value="slideshow">Slideshow</option>
+                                    <option value="video">Video</option>
                                     <option value="cards">Flashcards/Quiz</option>
                                     <option value="code">Code</option>
                                 </select>
-                                <button onClick={handleAddButtonClick}><i className="fas fa-plus"></i></button>
+                                <button onClick={() => handleAddButtonClickBelow(index)}><i className="fas fa-check"></i></button>
+                                <button onClick={() => cancelNewInputBelow(index)}><i className="fas fa-times"></i></button>
                             </div>
-                        )}
                     </div>
                 )
             }
@@ -367,15 +383,17 @@ const Form = () => {
       ) : (
         <div className="add-input">
           <select value={selectedOption} onChange={handleSelectChange}>
-            {/*<option value="heading">Heading</option>*/}
-            <option value="subheading">Subheading</option>
-            <option value="paragraph">Paragraph</option>
-            <option value="media">Photo</option>
-            <option value="media">Slideshow</option>
-            <option value="cards">Flashcards/Quiz</option>
-            <option value="code">Code</option>
+              {/*<option value="heading">Heading</option>*/}
+              <option value="subheading">Subheading</option>
+              <option value="paragraph">Paragraph</option>
+              <option value="photo">Photo</option>
+              <option value="slideshow">Slideshow</option>
+              <option value="video">Video</option>
+              <option value="cards">Flashcards/Quiz</option>
+              <option value="code">Code</option>
           </select>
           <button onClick={handleAddButtonClick}><i className="fas fa-plus"></i></button>
+          <button onClick={cancelNewInput}><i className="fas fa-times"></i></button>
         </div>
       )}
       </div>

@@ -81,7 +81,7 @@ const Worksheet = ({ setTitle }) => {
                 </div>
               </div>
             )}
-            {section.label === 'media' && (
+            {section.label === 'slideshow' || section.label === 'photo' || section.label === 'video' && (
               <iframe src={section.data.embedUrl} id="media-display" frameBorder="0" className="media-display"></iframe>
             )}
             {section.label === 'code' && (

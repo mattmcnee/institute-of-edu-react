@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import './form.css';
 
-const MediaInput = ({ onJsonData, blockId }) => {
+const MediaInput = ({ inputType, onJsonData, blockId }) => {
   const [inputValue, setInputValue] = useState("");
   const [iframeSrc, setIframeSrc] = useState("");
 
@@ -42,13 +42,28 @@ const MediaInput = ({ onJsonData, blockId }) => {
     return { embedUrl: "" };
   }
 
+  const getPlaceholderText = (inputType) => {
+    switch (inputType) {
+      case "photo":
+        return "https://drive.google.com/...";
+      case "video":
+        return "https://youtube.com/...";
+      default:
+        return "https://docs.google.com/...";
+    }
+  };
+
 
   return (
   <div className="input-container">
-    <iframe src={iframeSrc} id="media-display" frameBorder="0" className="media-display"></iframe>
-    <input
+  {
+    iframeSrc !== "" ?
+    <iframe src={iframeSrc} id="media-display" frameBorder="0" className="media-display"></iframe> :
+    <div className="media-display"></div>
+  }
+   <input
       type="text"
-      placeholder={"https://drive.google.com/file/..."}
+      placeholder={getPlaceholderText(inputType)}
       className="main-input"
       value={inputValue}
       onChange={handleInputChange}

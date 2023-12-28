@@ -66,7 +66,7 @@
 	border-radius: 6px;
 	outline: none;
 	font-family: inherit;
-	margin: 3px 10px 0 10px;
+	margin: 0 10px 0 10px;
 	background-color: transparent;
 }
 
@@ -97,6 +97,14 @@
 /*	border-radius: 6px;*/
 /*	border: 2px solid var(--form-outline);*/
 }
+
+.new-worksheet-form .worksheet-section .media-display:not(iframe) {
+	margin: 10px 12px;
+	width: calc(100% - 24px);
+	height: 340px;
+	background-color: var(--form-outline);
+}
+
 
 /* Item buttons */
 
@@ -145,7 +153,7 @@
 .new-worksheet-form .add-input{
 	width: 50%;
 	display: flex;
-	margin: 10px 20px;
+	margin: 0 20px;
 /*	border-radius: 6px;*/
 	border: 2px solid var(--form-outline);
 }
@@ -197,7 +205,6 @@
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
-	margin-top: 20px;
 }
 
 .new-worksheet-form .input-container code{
