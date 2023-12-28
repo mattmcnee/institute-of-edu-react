@@ -36,17 +36,6 @@ const Form = () => {
 
   const [popupState, setPopupState] = useState({ isVisible: false, x: 0, y: 0 });
 
-    const codeRefs = useRef({});
-
-  // Highlight code whenever inputs change
- useEffect(() => {
-    Object.values(codeRefs.current).forEach(element => {
-      if (element) {
-        element.removeAttribute('data-highlighted'); // Unset the highlighted attribute
-        hljs.highlightElement(element);
-      }
-    });
-  }, [inputs]);
   function convertToFirebaseFormat(data) {
     const firebaseFormat = {};
     data.sections.forEach((section, index) => {
@@ -132,6 +121,7 @@ const Form = () => {
       label: selectedOption,
       value: { text: "" },
       isHovered: false,
+      isTopHovered: false,
     });
     setInputs(newInputs);
     console.log("Selected Option:", selectedOption);
@@ -211,15 +201,61 @@ const Form = () => {
     console.log("HIII")
   };
 
+  const handleMouseMove = (event, inputId) => {
+    const element = event.currentTarget;
+    const rect = element.getBoundingClientRect();
+    const mouseY = event.clientY;
+    const elementMidPoint = rect.top + rect.height / 2;
+
+    if (mouseY < elementMidPoint) {
+      console.log(`Mouse is in the upper half of input ${inputId}`);
+      // Additional logic for the upper half
+      const currentIndex = inputs.findIndex(input => input.id === inputId);
+
+      if (currentIndex > 0 && !inputs[currentIndex - 1].isHovered) {
+        // Update the state immutably
+        setInputs(inputs.map((input, index) => {
+          if (index === currentIndex - 1) {
+            return { ...input, isHovered: true };
+          }
+          return input;
+        }));
+    } else {
+      console.log(`Mouse is in the lower half of input ${inputId}`);
+
+      }
+      // Additional logic for the lower half
+    }
+  };
+
+
+  const isAboveInputHovered = (currentInputId) => {
+  // Find the index of the current input
+  const currentIndex = inputs.findIndex(input => input.id === currentInputId);
+
+  // If the current input is the first one or not found, there is no input above it
+  if (currentIndex <= 0) {
+    return false;
+  }
+
+  // Check if the input above the current input is hovered
+  const aboveInput = inputs[currentIndex - 1];
+  return aboveInput.isHovered, currentIndex;
+};
+
+
+
+
   return (
     <div className="new-worksheet-form">
-{/*    <label>Title</label>
-    <input
-      placeholder="Enter Title"
-      value={title}
-      onChange={(e) => setTitle(e.target.value)}
-      className="main-input"
-    />*/}
+      <div className="form-title">
+        <input
+          placeholder="Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="main-input"
+        />
+      </div>
 
     <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
       <Droppable droppableId="inputs">
@@ -228,12 +264,15 @@ const Form = () => {
             {inputs.map((input, index) => (
               <Draggable key={input.id} draggableId={input.id.toString()} index={index}>
                 {(provided, snapshot) => (
-                  <div
+                  <div className= "form-section"
                     ref={provided.innerRef}
                     {...provided.draggableProps}
-                    className={snapshot.isDragging ? "worksheet-section drag" : "worksheet-section"}
                     onMouseEnter={() => handleMouseEnter(input.id)}
                     onMouseLeave={() => handleMouseLeave(input.id)}
+                    onMouseMove={(e) => handleMouseMove(e, input.id)}
+                  >
+                  <div
+                    className={snapshot.isDragging ? "worksheet-section drag" : "worksheet-section"}
                   >
                     <div 
                       className={(input.isHovered && !isDragging) || snapshot.isDragging ? "button-options" : "button-options transparent"}
@@ -287,6 +326,30 @@ const Form = () => {
                         <i className="fas fa-trash-alt"></i>
                       </button>
                     </div>
+                  </div>
+            {
+                ((input.isHovered && !isDragging)) && (
+                    <div className="new-input-select">
+                        {!addNew ? (
+                            <button onClick={addNewInput}><i className="fas fa-plus"></i></button>
+                        ) : (
+                            <div className="add-input">
+                                <select value={selectedOption} onChange={handleSelectChange}>
+                                    {/*<option value="heading">Heading</option>*/}
+                                    <option value="subheading">Subheading</option>
+                                    <option value="paragraph">Paragraph</option>
+                                    <option value="media">Photo</option>
+                                    <option value="slideshow">Slideshow</option> {/* Changed the value to "slideshow" */}
+                                    <option value="cards">Flashcards/Quiz</option>
+                                    <option value="code">Code</option>
+                                </select>
+                                <button onClick={handleAddButtonClick}><i className="fas fa-plus"></i></button>
+                            </div>
+                        )}
+                    </div>
+                )
+            }
+
                     {/* <div className="bottom-box">
                       ----- + -----
                     </div>*/}

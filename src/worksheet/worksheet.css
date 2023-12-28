@@ -1,13 +1,19 @@
-:root{
+/*:root{
   --form-outline: #aaa;
   --form-outline-bold: #888;
 }
+*/
 
+body{
+	background: linear-gradient(176deg, rgb(245, 245, 245) 100%, rgb(225, 225, 225) 50%);
+	min-height: 100vh;
+	background-attachment: fixed;
+}
 .worksheet-container{
 	padding-top: 10px;
 	margin-top: 20px;
 	font-size: 18px;
-	width: 70%;
+	width: 75%;
 }
 
 .worksheet-container .worksheet-section{
@@ -16,7 +22,7 @@
 	flex-direction: row;
 	position: relative;
 	margin: 0px 48px 0 41px;
-	background-color: white;
+	background-color: transparent;
 	box-sizing: border-box;
 	flex-grow: 1;
 }
@@ -26,7 +32,8 @@
 	margin: 10px 12px;
 	width: calc(100% - 24px);
 	height: 340px;
-	border-radius: 6px;
+/*	border-radius: 6px;*/
+/*	border: 2px solid var(--form-outline);*/
 }
 
 .worksheet-container .worksheet-section .content-container{

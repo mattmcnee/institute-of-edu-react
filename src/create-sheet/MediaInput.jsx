@@ -44,7 +44,7 @@ const MediaInput = ({ onJsonData, blockId }) => {
 
 
   return (
-  <div className="top-input">
+  <div className="input-container">
     <iframe src={iframeSrc} id="media-display" frameBorder="0" className="media-display"></iframe>
     <input
       type="text"

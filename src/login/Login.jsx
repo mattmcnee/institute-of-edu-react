@@ -32,7 +32,7 @@ const Login = ({ setTitle }) => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         // User is signed in, redirect to '/worksheet' or another authenticated route
-        navigate('/worksheet');
+        navigate('/');
       }
     });
 
