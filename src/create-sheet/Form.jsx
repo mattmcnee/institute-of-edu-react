@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, set, push } from 'firebase/database';
@@ -8,6 +8,8 @@ import MediaInput from './MediaInput.jsx';
 import worksheetData from '/src/worksheet/worksheetData.json';
 import Popup from '/src/popup/Popup.jsx';
 import './form.css';
+import hljs from 'highlight.js';
+import 'highlight.js/styles/default.css';
 
 // Configure and initialize firebase
 const firebaseConfig = {
@@ -34,6 +36,17 @@ const Form = () => {
 
   const [popupState, setPopupState] = useState({ isVisible: false, x: 0, y: 0 });
 
+    const codeRefs = useRef({});
+
+  // Highlight code whenever inputs change
+ useEffect(() => {
+    Object.values(codeRefs.current).forEach(element => {
+      if (element) {
+        element.removeAttribute('data-highlighted'); // Unset the highlighted attribute
+        hljs.highlightElement(element);
+      }
+    });
+  }, [inputs]);
   function convertToFirebaseFormat(data) {
     const firebaseFormat = {};
     data.sections.forEach((section, index) => {
@@ -253,7 +266,6 @@ const handleMouseLeave = (id) => {
                     onMouseLeave={() => handleMouseLeave(input.id)}
                     onContextMenu={handleRightClick}
                   >
-                    
                     <div 
                       className={(input.isHovered && !isDragging) || snapshot.isDragging ? "button-options" : "button-options transparent"}
                     >
@@ -269,6 +281,7 @@ const handleMouseLeave = (id) => {
 
                       {/* Paragraph entry */}
                       {input.label === "paragraph" && (
+                        <>
                         <textarea
                           placeholder="Text"
                           value={input.value.text}
@@ -279,6 +292,40 @@ const handleMouseLeave = (id) => {
                           }}                        
                           className="main-input"
                         />
+                        <pre>
+                          <code 
+                            className="language-javascript"
+                            ref={el => codeRefs.current[input.id] = el}
+                            contentEditable={true}
+                            onChange={(e) => {
+                              handleInputChange(input.id, e.target.value);
+                            }}   
+                          >
+                            {input.value.text}
+                          </code>
+                        </pre>
+
+                        </>
+                      )}
+
+                      {/* Code entry */}
+                      {input.label === "code" && (
+                        <>
+                        <pre>
+                          <code 
+                            onInput={(e) => {
+                              handleInputChange(input.id, e.currentTarget.textContent);
+                            }}
+                            className="language-javascript"
+                            ref={el => codeRefs.current[input.id] = el}
+                            contentEditable={true}
+                          >
+                            {input.value.text}
+                          </code>
+                        </pre>
+
+
+                        </>
                       )}
 
                       {/* Subheading entry */}
@@ -316,6 +363,9 @@ const handleMouseLeave = (id) => {
                         <i className="fas fa-trash-alt"></i>
                       </button>
                     </div>
+                    {/* <div className="bottom-box">
+                      ----- + -----
+                    </div>*/}
                   </div>
                 )}
               </Draggable>
@@ -336,6 +386,7 @@ const handleMouseLeave = (id) => {
             <option value="photo">Photo</option>
             <option value="slides">Slideshow</option>
             <option value="cards">Flashcards/Quiz</option>
+            <option value="code">Code</option>
           </select>
           <button onClick={handleAddButtonClick}><i className="fas fa-plus"></i></button>
         </div>

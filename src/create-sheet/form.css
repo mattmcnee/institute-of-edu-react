@@ -19,6 +19,14 @@
 	background-color: white;
 }
 
+.new-worksheet-form .input-area .bottom-box{
+	position: absolute;
+	bottom: -5px;
+	left: calc(50% - 15%);
+	width: 30%;
+	text-align: center;
+}
+
 .new-worksheet-form .input-area.drag{
 	border: 1px solid grey;
 }
