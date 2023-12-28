@@ -72,7 +72,7 @@ const Worksheet = ({ setTitle }) => {
         {worksheetData.map((section) => (
           <div key={section.id} className="worksheet-section">
             <div className="content-container">
-            {section.label === 'subheading' && <h2>{section.data}</h2>}
+            {section.label === 'subheading' && <p className="subheading">{section.data}</p>}
             {section.label === 'paragraph' && <p>{section.data}</p>}
             {section.label === 'game' && (
               <div className="game-container">
