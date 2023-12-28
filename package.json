@@ -10,7 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@codemirror/lang-javascript": "^6.2.1",
     "@hello-pangea/dnd": "^16.3.0",
+    "@uiw/react-codemirror": "^4.21.21",
     "chart.js": "^4.4.0",
     "dotenv": "^16.3.1",
     "firebase": "^10.6.0",

@@ -5,8 +5,10 @@ import { getDatabase, ref, set, push } from 'firebase/database';
 import { getAuth, onAuthStateChanged  } from 'firebase/auth';
 import PairsInput from './PairsInput.jsx';
 import MediaInput from './MediaInput.jsx';
+import CodeInput from './CodeInput.jsx';
+import TitleInput from './TitleInput.jsx';
+import ParagraphInput from './ParagraphInput.jsx';
 import worksheetData from '/src/worksheet/worksheetData.json';
-import Popup from '/src/popup/Popup.jsx';
 import './form.css';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/default.css';
@@ -116,6 +118,7 @@ const Form = () => {
     else{
       updatedJson = [...jsonData, data];
     }
+    console.log(updatedJson)
     setJsonData(updatedJson);
   };
 
@@ -137,50 +140,42 @@ const Form = () => {
     setAddNew(false);
   };
 
-  const handleInputChange = (id, newText) => {
-    const updatedInputs = inputs.map((input) => 
-      input.id === id ? { ...input, value: { ...input.value, text: newText } } : input
-    );
-    setInputs(updatedInputs);
-    console.log(updatedInputs);
-  };
-
   const handleDeleteButtonClick = (id) => {
     const updatedInputs = inputs.filter((input) => input.id !== id);
     setInputs(updatedInputs);
   };
 
-const handleSubmit = () => {
-  const updatedFormValues = inputs.map((input, index) => {
-    // Find all objects in jsonData where id matches input.id
-    const matchedObjects = jsonData.filter((item) => item.id === input.id);
+  const handleSubmit = () => {
+    const updatedFormValues = inputs.map((input, index) => {
+      // Find all objects in jsonData where id matches input.id
+      const matchedObjects = jsonData.filter((item) => item.id === input.id);
 
-    // Extract data from the matched objects
-    const matchedData = matchedObjects.map((matchedItem) => matchedItem.data);
-    const newData = (matchedData.length > 0) ? matchedData[0] : null;
+      // Extract data from the matched objects
+      const matchedData = matchedObjects.map((matchedItem) => matchedItem.data);
+      const newData = (matchedData.length > 0) ? matchedData[0] : null;
 
-    return {
-      label: input.label,
-      value: {"text": input.value.text, "data": newData},
-      id: input.id,
-      order: index
-    };
-  });
-  writeUserData(updatedFormValues);
-  console.log("Form Values:", updatedFormValues);
-};
+      return {
+        label: input.label,
+        value: {"text": input.value.text, "data": newData},
+        id: input.id,
+        order: index
+      };
+    });
+    writeUserData(updatedFormValues);
+    console.log("Form Values:", updatedFormValues);
+  };
 
-const handleMouseEnter = (id) => {
-  setInputs(inputs.map(input => 
-    ({ ...input, isHovered: input.id === id })
-  ));
-};
+  const handleMouseEnter = (id) => {
+    setInputs(inputs.map(input => 
+      ({ ...input, isHovered: input.id === id })
+    ));
+  };
 
-const handleMouseLeave = (id) => {
-  setInputs(inputs.map(input => 
-    input.id === id ? { ...input, isHovered: false } : input
-  ));
-};
+  const handleMouseLeave = (id) => {
+    setInputs(inputs.map(input => 
+      input.id === id ? { ...input, isHovered: false } : input
+    ));
+  };
 
 
   function capitalizeFirstLetter(string) {
@@ -212,29 +207,6 @@ const handleMouseLeave = (id) => {
     setInputs(reorderedInputs);
   };
 
-  const adjustHeight = (element) => {
-    if (element) {
-      element.style.height = 'auto';
-      console.log(element.scrollHeight)
-      element.style.height = `${element.scrollHeight}px`;       
-
-    }
-  };
-
-  const handleRightClick = (event) => {
-    event.preventDefault();
-    setPopupState({
-      isVisible: true,
-      x: event.pageX,
-      y: event.pageY
-    });
-  };
-
-  const closePopup = () => {
-    setPopupState({ isVisible: false, x: 0, y: 0 });
-  };
-
-
   const addNewInput = () => {
     setAddNew(true);
     console.log(addNew)
@@ -264,7 +236,6 @@ const handleMouseLeave = (id) => {
                     className={snapshot.isDragging ? "input-area drag" : "input-area"}
                     onMouseEnter={() => handleMouseEnter(input.id)}
                     onMouseLeave={() => handleMouseLeave(input.id)}
-                    onContextMenu={handleRightClick}
                   >
                     <div 
                       className={(input.isHovered && !isDragging) || snapshot.isDragging ? "button-options" : "button-options transparent"}
@@ -281,61 +252,16 @@ const handleMouseLeave = (id) => {
 
                       {/* Paragraph entry */}
                       {input.label === "paragraph" && (
-                        <>
-                        <textarea
-                          placeholder="Text"
-                          value={input.value.text}
-                          rows="1"
-                          onChange={(e) => {
-                            handleInputChange(input.id, e.target.value);
-                            adjustHeight(e.target);
-                          }}                        
-                          className="main-input"
-                        />
-                        <pre>
-                          <code 
-                            className="language-javascript"
-                            ref={el => codeRefs.current[input.id] = el}
-                            contentEditable={true}
-                            onChange={(e) => {
-                              handleInputChange(input.id, e.target.value);
-                            }}   
-                          >
-                            {input.value.text}
-                          </code>
-                        </pre>
-
-                        </>
+                        <ParagraphInput onJsonData={handleJsonData} blockId={input.id}/>
                       )}
 
                       {/* Code entry */}
                       {input.label === "code" && (
-                        <>
-                        <pre>
-                          <code 
-                            onInput={(e) => {
-                              handleInputChange(input.id, e.currentTarget.textContent);
-                            }}
-                            className="language-javascript"
-                            ref={el => codeRefs.current[input.id] = el}
-                            contentEditable={true}
-                          >
-                            {input.value.text}
-                          </code>
-                        </pre>
-
-
-                        </>
+                        <CodeInput onJsonData={handleJsonData} blockId={input.id}/>
                       )}
-
                       {/* Subheading entry */}
                       {input.label === "subheading" && (
-                        <input
-                          placeholder="Subheading"
-                          value={input.value.text}
-                          onChange={(e) => handleInputChange(input.id, e.target.value)}
-                          className="main-input subheading"
-                        />
+                        <TitleInput onJsonData={handleJsonData} blockId={input.id}/>
                       )}
 
                       {/* Presentation entry */}
@@ -401,16 +327,6 @@ const handleMouseLeave = (id) => {
         </div>
       </div>
     </DragDropContext>
-
-      <div onContextMenu={handleRightClick}>
-        {popupState.isVisible && (
-          <Popup
-            x={popupState.x}
-            y={popupState.y}
-            closeMenu={closePopup}
-          />
-        )}
-      </div>
     </div>
   );
 };

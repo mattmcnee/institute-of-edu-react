@@ -170,3 +170,24 @@
 	justify-content: center;
 	margin-top: 20px;
 }
+
+.new-worksheet-form .input-container code{
+	position: absolute;
+	top: 0;
+	left: 30px;
+	pointer-events: none;
+	max-width: 100%;
+	z-index: 1;
+}
+
+.new-worksheet-form .input-container textarea{
+	background: transparent !important;
+	z-index: 2;
+}
+
+.shared-styles {
+  font-family: "Fira Code", monospace;
+  font-size: 16px;
+  line-height: 1.5;
+  padding: 10px;
+}
