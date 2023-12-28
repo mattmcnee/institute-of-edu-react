@@ -10,16 +10,17 @@
 	width: 70%;
 }
 
-.new-worksheet-form .input-area{
+.new-worksheet-form .worksheet-section{
 	border-radius: 6px;
 	display: flex;
 	flex-direction: row;
 	position: relative;
 	margin: 0px 20px 0 20px;
 	background-color: white;
+	box-sizing: border-box;
 }
 
-.new-worksheet-form .input-area .bottom-box{
+.new-worksheet-form .worksheet-section .bottom-box{
 	position: absolute;
 	bottom: -5px;
 	left: calc(50% - 15%);
@@ -27,17 +28,17 @@
 	text-align: center;
 }
 
-.new-worksheet-form .input-area.drag{
+.new-worksheet-form .worksheet-section.drag{
 	border: 1px solid grey;
 }
 
-.new-worksheet-form .input-area .input-container{
+.new-worksheet-form .worksheet-section .input-container{
 	display: flex;
 	flex-grow: 1;
 	flex-direction: column;
 }
 
-.new-worksheet-form .input-area .main-input{
+.new-worksheet-form .worksheet-section .main-input{
 	flex-grow: 1;
 	border: none;
 	border-radius: 6px;
@@ -47,22 +48,27 @@
 	background-color: transparent;
 }
 
-.new-worksheet-form .input-area input.main-input.subheading{
-	font-size: 25px;
+.new-worksheet-form .worksheet-section input.main-input{
+	font-size: inherit;
 }
 
-.new-worksheet-form .input-area textarea.main-input{
+.new-worksheet-form .worksheet-section input.main-input.subheading{
+	font-size: 1.6em;
+}
+
+.new-worksheet-form .worksheet-section textarea.main-input{
+	font-size: inherit;
 	height: auto;
 	resize: none;
 	box-sizing: border-box;
 }
 
-.new-worksheet-form .input-area textarea.main-input::placeholder, 
-.new-worksheet-form .input-area input.main-input::placeholder{
+.new-worksheet-form .worksheet-section textarea.main-input::placeholder, 
+.new-worksheet-form .worksheet-section input.main-input::placeholder{
   color: #555;
 }
 
-.new-worksheet-form .input-area iframe.media-display{
+.new-worksheet-form .worksheet-section iframe.media-display{
 	margin: 10px 12px;
 	width: calc(100% - 24px);
 	height: 340px;
@@ -71,7 +77,7 @@
 
 /* Item buttons */
 
-.new-worksheet-form .input-area .button-options{
+.new-worksheet-form .worksheet-section .button-options{
 	display: flex;
 	flex-direction: row;
 }
@@ -100,7 +106,7 @@
 	flex-grow: 0;
 }
 
-.new-worksheet-form .input-area button:hover, 
+.new-worksheet-form .worksheet-section button:hover, 
 .new-worksheet-form .add-input button:hover, 
 .new-worksheet-form .add-input select:hover,
 .new-worksheet-form .submit-form button:hover,
@@ -108,7 +114,7 @@
 	cursor: pointer;
 }
 
-.new-worksheet-form .input-area .drag-handle:hover{
+.new-worksheet-form .worksheet-section .drag-handle:hover{
 	cursor: grab;
 }
 
@@ -190,4 +196,26 @@
   font-size: 16px;
   line-height: 1.5;
   padding: 10px;
+}
+
+
+.cm-editor{
+	border-radius: 6px;
+	margin: 8px 12px 8px 11px;
+	border: 2px solid #dadada;
+	box-sizing: border-box;
+}
+
+div .cm-editor.cm-focused{
+	outline: none;
+}
+
+.cm-gutters, .cm-gutter{
+	border-top-left-radius: 4px;
+	border-bottom-left-radius: 4px;
+}
+
+.cm-content{
+	border-top-right-radius: 6px;
+	border-bottom-right-radius: 6px;
 }

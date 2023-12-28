@@ -132,7 +132,7 @@ nav{
 
 */
 
-.worksheet-conatiner{
+/*.worksheet-conatiner{
   padding: 30px;
   position: relative;
 }
@@ -142,11 +142,12 @@ nav{
   padding-bottom: 56.5%;
 }*/
 
+/*
 .worksheet-section {
   width: 100%;
-  max-width: 700px; /* Optional: Set a maximum width for the container */
+  max-width: 700px; 
   margin: 0 auto;
-}
+}*/
 
 .game-container {
   width: 100%;

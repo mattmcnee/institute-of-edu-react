@@ -10,8 +10,6 @@ import TitleInput from './TitleInput.jsx';
 import ParagraphInput from './ParagraphInput.jsx';
 import worksheetData from '/src/worksheet/worksheetData.json';
 import './form.css';
-import hljs from 'highlight.js';
-import 'highlight.js/styles/default.css';
 
 // Configure and initialize firebase
 const firebaseConfig = {
@@ -156,7 +154,7 @@ const Form = () => {
 
       return {
         label: input.label,
-        value: {"text": input.value.text, "data": newData},
+        data: newData,
         id: input.id,
         order: index
       };
@@ -233,7 +231,7 @@ const Form = () => {
                   <div
                     ref={provided.innerRef}
                     {...provided.draggableProps}
-                    className={snapshot.isDragging ? "input-area drag" : "input-area"}
+                    className={snapshot.isDragging ? "worksheet-section drag" : "worksheet-section"}
                     onMouseEnter={() => handleMouseEnter(input.id)}
                     onMouseLeave={() => handleMouseLeave(input.id)}
                   >
@@ -265,7 +263,7 @@ const Form = () => {
                       )}
 
                       {/* Presentation entry */}
-                      {input.label === "slides" && (
+                      {input.label === "media" && (
                         <MediaInput inputValue={"media"} onJsonData={handleJsonData} blockId={input.id}/>
                       )}
 
@@ -309,8 +307,8 @@ const Form = () => {
             {/*<option value="heading">Heading</option>*/}
             <option value="subheading">Subheading</option>
             <option value="paragraph">Paragraph</option>
-            <option value="photo">Photo</option>
-            <option value="slides">Slideshow</option>
+            <option value="media">Photo</option>
+            <option value="media">Slideshow</option>
             <option value="cards">Flashcards/Quiz</option>
             <option value="code">Code</option>
           </select>

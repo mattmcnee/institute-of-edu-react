@@ -3,17 +3,14 @@ import { useParams } from 'react-router-dom';
 import Game from '/src/three/Game';
 import { getDatabase, ref, get } from 'firebase/database';
 import Nav from '/src/Nav';
-import hljs from 'highlight.js';
-import 'highlight.js/styles/default.css';
+import CodeMirror from '@uiw/react-codemirror';
+import { javascript } from '@codemirror/lang-javascript';
+import './worksheet.css';
 
 const Worksheet = ({ setTitle }) => {
   const [worksheetData, setWorksheetData] = useState([]);
   const [loading, setLoading] = useState(true);
   let { id } = useParams();
-
-  useEffect(() => {
-    hljs.highlightAll();
-  }, [worksheetData]);
 
   useEffect(() => {
     setTitle("Game Worksheet");
@@ -68,41 +65,37 @@ const Worksheet = ({ setTitle }) => {
     );
   }
 
-  const tweenCode = `
-const tween = KUTE.fromTo(
-  '#blob1',
-  { path: '#blob1' },
-  { path: '#blob2' },
-  { repeat: 999, duration: 3000, yoyo: true }
-).start();
-`;
-
   return (
     <div className="home-page">
       <Nav title={"New Worksheet"}/>
       <div className="worksheet-container">
-{/*      <iframe className="sink"
-       frameBorder="0"
-       height="300px"  src="https://onecompiler.com/embed/python" 
-       width="80%"
-       ></iframe>*/}
         {worksheetData.map((section) => (
           <div key={section.id} className="worksheet-section">
-            {section.label === 'subheading' && <h2>{section.value.text}</h2>}
-            {section.label === 'paragraph' && <p>{section.value.text}</p>}
+            <div className="content-container">
+            {section.label === 'subheading' && <h2>{section.data}</h2>}
+            {section.label === 'paragraph' && <p>{section.data}</p>}
             {section.label === 'game' && (
               <div className="game-container">
                 <div className="game-window">
-                  <Game gameType={section.value.data.gameType} src={section.value.data.src} />
+                  <Game gameType={section.data.gameType} src={section.data.src} />
                 </div>
               </div>
             )}
+            {section.label === 'media' && (
+              <iframe src={section.data.embedUrl} id="media-display" frameBorder="0" className="media-display"></iframe>
+            )}
+            {section.label === 'code' && (
+              <CodeMirror
+                value={section.data}
+                height="200px"
+                extensions={[javascript()]}
+                readOnly={true}
+              />
+            )}
+          </div>
           </div>
         ))}
       </div>
-      <pre><code className="language-javascript">
-        {tweenCode}
-      </code></pre>
     </div>
   );
 };

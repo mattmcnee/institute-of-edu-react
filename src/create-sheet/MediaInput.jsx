@@ -23,34 +23,25 @@ const MediaInput = ({ onJsonData, blockId }) => {
   }
 
   function extractIds(url) {
-    const regex = /\/d\/([a-zA-Z0-9_-]+)(?:\/edit(?:\?|#)slide=id\.([a-zA-Z0-9_]+))?|\/file\/d\/([a-zA-Z0-9_-]+)\//;
-    const match = url.match(regex);
-
     const slidesRegex = /\/presentation\/d\/([a-zA-Z0-9_-]+)/;
     const driveRegex = /\/file\/d\/([a-zA-Z0-9_-]+)/;
+    const videoRegex = /youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/;
 
-    var type = null;
-    if(url.match(slidesRegex)){
-      type = "slide";
-    }else if(url.match(driveRegex)){
-      type = "photo";
+    const slidesMatch = url.match(slidesRegex);
+    const driveMatch = url.match(driveRegex);
+    const videoMatch = url.match(videoRegex);
+
+    if (slidesMatch) {
+      return { mainId: slidesMatch[1], type: "media", embedUrl: "https://docs.google.com/presentation/d/" + slidesMatch[1] + "/embed" };
+    } else if (driveMatch) {
+      return { mainId: driveMatch[1], type: "media", embedUrl: "https://drive.google.com/file/d/" + driveMatch[1] + "/preview" };
+    } else if (videoMatch) {
+      return { mainId: videoMatch[1], type: "media", embedUrl: "https://www.youtube.com/embed/" + videoMatch[1] };
     }
 
-    var embedUrl = "";
-    if (match) {
-        const mainId = match[1] || match[3];
-        const slideId = match[2] || null;
-        if(type == "slide"){
-          embedUrl = "https://docs.google.com/presentation/d/"+mainId+"/embed?start=false&slide=id."+slideId;
-        }
-        else if (type == "photo"){
-          embedUrl = "https://drive.google.com/file/d/"+mainId+"/preview";
-        }
-        return { mainId, slideId, type, embedUrl };
-    } else {
-        return {embedUrl };
-    }
-}
+    return { embedUrl: "" };
+  }
+
 
   return (
   <div className="top-input">
