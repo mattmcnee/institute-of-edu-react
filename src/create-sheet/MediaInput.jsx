@@ -25,7 +25,8 @@ const MediaInput = ({ inputType, onJsonData, blockId }) => {
   function extractIds(url) {
     const slidesRegex = /\/presentation\/d\/([a-zA-Z0-9_-]+)/;
     const driveRegex = /\/file\/d\/([a-zA-Z0-9_-]+)/;
-    const videoRegex = /youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/;
+    const videoRegex = /(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/;
+
 
     const slidesMatch = url.match(slidesRegex);
     const driveMatch = url.match(driveRegex);

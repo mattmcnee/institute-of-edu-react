@@ -77,7 +77,7 @@ const Worksheet = ({ setTitle }) => {
             {section.label === 'game' && (
               <div className="game-container">
                 <div className="game-window">
-                  <Game gameType={section.data.gameType} src={section.data.src} />
+                  <Game gameType={"bird"} src={""} />
                 </div>
               </div>
             )}

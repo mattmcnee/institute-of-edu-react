@@ -157,13 +157,14 @@ nav{
 
 /* Additional styles for the game content inside the container */
 .game-container .game-window {
+  border: 2px solid #d9d9d9;
   width: 90%;
   height: 90%;
   position: absolute;
   top: 5%;
   left: 3%;
-  background-color: lightgrey;
-  border-radius: 10px;
+/*  background-color: lightgrey;*/
+/*  border-radius: 10px;*/
 }
 
 #main-game-container{

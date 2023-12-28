@@ -357,6 +357,7 @@ const Form = () => {
                                     <option value="slideshow">Slideshow</option>
                                     <option value="video">Video</option>
                                     <option value="cards">Flashcards/Quiz</option>
+                                    <option value="game">Game</option>
                                     <option value="code">Code</option>
                                 </select>
                                 <button onClick={() => handleAddButtonClickBelow(index)}><i className="fas fa-check"></i></button>
@@ -390,6 +391,7 @@ const Form = () => {
               <option value="slideshow">Slideshow</option>
               <option value="video">Video</option>
               <option value="cards">Flashcards/Quiz</option>
+              <option value="game">Game</option>
               <option value="code">Code</option>
           </select>
           <button onClick={handleAddButtonClick}><i className="fas fa-plus"></i></button>
