@@ -252,6 +252,7 @@ div .cm-editor.cm-focused{
 .pairs-input{
 	display: flex;
 	flex-direction: column;
+	margin-top: 18px;
 }
 
 .pairs-input .extra-input-holder{
@@ -263,7 +264,7 @@ div .cm-editor.cm-focused{
 .pairs-input .extra-input-holder .textarea{
 	display: flex;
 	flex-grow: 1;
-		border: 2px solid grey;
+		border: 2px solid var(--form-outline);
 			background-color: white;
 }
 
@@ -279,7 +280,7 @@ div .cm-editor.cm-focused{
 .pairs-input .extra-input-gap{
 /*	border-left: 2px solid grey;
 	border-right: 2px solid grey;*/
-	border-top: 1px solid lightgrey;
+	border-top: 1px solid var(--form-outline);
 /*	border-bottom: 1px solid lightgrey;*/
 display: flex;
 flex-direction: column;
@@ -309,4 +310,46 @@ flex-direction: column;
 	width: 100%;
 	text-align: center;
 	box-sizing: border-box;
+}
+
+.pairs-input .extra-input-gap button:hover{
+	cursor: pointer;
+}
+
+.pairs-input .extra-input-gap div:hover{
+	cursor: grab;
+}
+
+.pairs-input .form-title{
+	display: flex;
+	flex-direction: row;
+	margin: 0 38px 10px 38px;
+	padding-bottom: 6px;
+	border-bottom: 2px solid var(--form-outline);
+}
+
+.pairs-input .form-title input{
+	display: flex;
+	flex-grow: 1;
+	background-color: transparent;
+	border: none;
+	outline: none;
+	font-size: 1.8em;
+}
+
+.pairs-input .extra-input-add button{
+/*	border-radius: 6px;*/
+	padding: 5px 7px;
+	background-color: transparent;
+	border: 2px solid var(--form-outline);
+}
+
+.pairs-input .extra-input-add button:hover{
+	cursor: pointer;
+}
+
+.pairs-input .extra-input-add {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }

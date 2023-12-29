@@ -49,10 +49,10 @@ const Home = ({setTitle}) => {
       <div className="hero-section">
         <img src={shapesImage} className="hero-img" alt="Shapes" />
         <div className="hero-text">
-          <h2>Edu</h2>
-          Edu is an online learning platform that offers a wide range of courses for students of all ages.
+          <h2>Lexicon+</h2>
+          Lexicon+ is an online learning platform that offers a wide range of courses for students of all ages.
           Whether you want to learn programming, improve your math skills, or explore creative arts, we have a course for you.
-          Join Edu today and start your learning journey!
+          Join Lexicon+ today and start your learning journey!
         </div>
       </div>
       

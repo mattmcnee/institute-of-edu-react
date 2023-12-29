@@ -95,6 +95,12 @@ const PairsInput = ({ inputValue, onJsonData, blockId }) => {
 
   return (
     <div className="pairs-input">
+      <div className="form-title">
+        <input
+          placeholder="Title"
+          className="main-input"
+        />
+      </div>
     <DragDropContext
       onDragEnd={onDragEnd}
     >
