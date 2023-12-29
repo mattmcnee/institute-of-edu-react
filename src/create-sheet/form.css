@@ -253,12 +253,13 @@ div .cm-editor.cm-focused{
 	display: flex;
 	flex-direction: column;
 	margin-top: 18px;
+	width: 75%;
 }
 
 .pairs-input .extra-input-holder{
 	display: flex;
 	flex-direction: row;
-	padding: 10px 30px;
+	padding: 10px 40px;
 }
 
 .pairs-input .extra-input-holder .textarea{
@@ -352,4 +353,27 @@ flex-direction: column;
   display: flex;
   flex-direction: row;
   justify-content: center;
+}
+
+.pairs-input .form-options{
+	display: flex;
+	flex-direction: row;
+	width: calc(100% - 80px);
+	margin: 30px 40px 10px 40px;
+	border-top: 2px solid var(--form-outline);
+}
+
+.pairs-input .form-options div{
+	flex-grow: 1;
+	display: flex;
+	justify-content: center;
+}
+
+.pairs-input .submit-form button{
+	display: flex;
+	padding: 5px 4px;
+/*	border-radius: 6px;*/
+	border: 2px solid var(--form-outline);
+	background-color: transparent;
+	margin: 10px 20px;
 }

@@ -25,6 +25,20 @@ const PairsInput = ({ inputValue, onJsonData, blockId }) => {
     returnJsonData(updatedInputs);
   };
 
+  const writeUserData = (data) => {
+    if(currentUserId){
+      console.log(data)
+      const sheetData = {
+        title: title,
+        data: convertToFirebaseFormat(data)
+      };
+      console.log(currentUser);
+      
+    const newSheetRef = push(ref(database, 'cards/'));
+    set(newSheetRef, sheetData)    
+    }
+  };
+
   const returnJsonData = (newInputs) => {
     const sendBack = {
       "id": blockId,
@@ -157,6 +171,14 @@ const PairsInput = ({ inputValue, onJsonData, blockId }) => {
         <button onClick={addInput}>
           <i className="fas fa-plus"></i>
         </button>
+      </div>
+      <div className="form-options">
+        <div className="submit-form">
+          <button>Save Draft</button>
+        </div>
+      <div className="submit-form">
+          <button>Submit</button>
+        </div>
       </div>
     </DragDropContext>
     </div>
