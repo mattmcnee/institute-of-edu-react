@@ -1,6 +1,6 @@
 :root{
   --form-outline: #d9d9d9;
-  --form-outline-bold: #888;
+  --form-outline-bold: #444;
 }
 
 .new-worksheet-form{
@@ -222,6 +222,10 @@
 	z-index: 2;
 }
 
+.new-worksheet-form i{
+	color: var(--form-outline-bold);
+}
+
 .cm-editor{
 /*	border-radius: 6px;*/
 	margin: 8px 12px 8px 11px;
@@ -242,3 +246,67 @@ div .cm-editor.cm-focused{
 	border-top-right-radius: 6px;
 	border-bottom-right-radius: 6px;
 }*/
+
+
+
+.pairs-input{
+	display: flex;
+	flex-direction: column;
+}
+
+.pairs-input .extra-input-holder{
+	display: flex;
+	flex-direction: row;
+	padding: 10px 30px;
+}
+
+.pairs-input .extra-input-holder .textarea{
+	display: flex;
+	flex-grow: 1;
+		border: 2px solid grey;
+			background-color: white;
+}
+
+.pairs-input .extra-input-holder .textarea textarea{
+	width: 100%;
+	border: none;
+	background-color: transparent;
+	outline: none;
+	resize: none;
+	max-height: 200px;
+}
+
+.pairs-input .extra-input-gap{
+/*	border-left: 2px solid grey;
+	border-right: 2px solid grey;*/
+	border-top: 1px solid lightgrey;
+/*	border-bottom: 1px solid lightgrey;*/
+display: flex;
+flex-direction: column;
+	background-color: white;
+}
+
+.pairs-input .rotate-button.rotated i{
+	transform: rotate(180deg);
+	transition: transform 0.5s ease-in-out;
+}
+
+.pairs-input .rotate-button:not(.rotated) i{
+	transform: rotate(0deg);
+	transition: transform 0.5s ease-in-out;
+}
+
+.pairs-input .extra-input-gap button, .pairs-input .extra-input-gap .drag-handle{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 8px 6px;
+	border-radius: 0;
+	border: none;
+	border-bottom: 1px solid var(--form-outline);
+	background-color: transparent;
+	flex-grow: 1;
+	width: 100%;
+	text-align: center;
+	box-sizing: border-box;
+}

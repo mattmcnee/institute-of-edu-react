@@ -94,6 +94,7 @@ const PairsInput = ({ inputValue, onJsonData, blockId }) => {
   };
 
   return (
+    <div className="pairs-input">
     <DragDropContext
       onDragEnd={onDragEnd}
     >
@@ -152,6 +153,7 @@ const PairsInput = ({ inputValue, onJsonData, blockId }) => {
         </button>
       </div>
     </DragDropContext>
+    </div>
   );
 };
 

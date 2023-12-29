@@ -10,6 +10,7 @@ import TitleInput from './TitleInput.jsx';
 import ParagraphInput from './ParagraphInput.jsx';
 import worksheetData from '/src/worksheet/worksheetData.json';
 import './form.css';
+import InputSelect from './InputSelect';
 
 // Configure and initialize firebase
 const firebaseConfig = {
@@ -37,16 +38,6 @@ const Form = () => {
   const [popupState, setPopupState] = useState({ isVisible: false, x: 0, y: 0 });
 
   function convertToFirebaseFormat(data) {
-    const firebaseFormat = {};
-    data.sections.forEach((section, index) => {
-      // Adding an 'order' property to each section
-      const sectionWithOrder = { ...section, order: index };
-      firebaseFormat[section.id] = sectionWithOrder;
-    });
-    return firebaseFormat;
-  }
-
-  function convertToFirebaseFormat2(data) {
     const firebaseFormat = {};
     data.forEach((section, index) => {
       // Adding an 'order' property to each section
@@ -81,7 +72,7 @@ const Form = () => {
       console.log(data)
       const sheetData = {
         title: title,
-        data: convertToFirebaseFormat2(data)
+        data: convertToFirebaseFormat(data)
       };
       console.log(currentUser);
       
@@ -129,9 +120,8 @@ const Form = () => {
   };
 
   const handleAddButtonClickBelow = (index) => {
-    // Create the new input object
     const newInput = {
-      id: new Date().getTime(), // Unique ID based on the current time
+      id: new Date().getTime(),
       label: selectedOption,
       value: { text: "" },
       isHovered: false,
@@ -141,13 +131,13 @@ const Form = () => {
     // Create a new array with the new input inserted at the specified index
     // and set 'newBelow' to false for the input at the index
     const newInputs = [
-      ...inputs.slice(0, index), // Elements before and including the index
-      { ...inputs[index], newBelow: false }, // Update the current item at index
-      newInput, // New input element
-      ...inputs.slice(index + 1) // Elements after the index
+      ...inputs.slice(0, index),
+      { ...inputs[index], newBelow: false },
+      newInput,
+      ...inputs.slice(index + 1)
     ];
 
-    setInputs(newInputs); // Update the state with the new inputs array
+    setInputs(newInputs);
     console.log("Selected Option:", selectedOption);
     console.log("New Inputs:", newInputs);
   };
@@ -291,85 +281,71 @@ const Form = () => {
                     onMouseEnter={() => handleMouseEnter(input.id)}
                     onMouseLeave={() => handleMouseLeave(input.id)}
                   >
-                  <div
-                    className={snapshot.isDragging ? "worksheet-section drag" : "worksheet-section"}
-                  >
-                    <div 
-                      className={(input.isHovered && !isDragging) || snapshot.isDragging ? "button-options" : "button-options transparent"}
+                    <div
+                      className={snapshot.isDragging ? "worksheet-section drag" : "worksheet-section"}
                     >
-                      <div className="drag-handle" {...provided.dragHandleProps}>
-                        <i className="fas fa-bars"></i>
+                      <div 
+                        className={(input.isHovered && !isDragging) || snapshot.isDragging ? "button-options" : "button-options transparent"}
+                      >
+                        <div className="drag-handle" {...provided.dragHandleProps}>
+                          <i className="fas fa-bars"></i>
+                        </div>
+                      </div>
+
+                 
+                      {/* This div will be filled with content corresponding to its label */}
+                      <div className="input-container">
+                        {/* <label>{capitalizeFirstLetter(input.label)}</label>*/}
+
+                        {/* Paragraph entry */}
+                        {input.label === "paragraph" && (
+                          <ParagraphInput onJsonData={handleJsonData} blockId={input.id}/>
+                        )}
+
+                        {/* Code entry */}
+                        {input.label === "code" && (
+                          <CodeInput onJsonData={handleJsonData} blockId={input.id}/>
+                        )}
+                        {/* Subheading entry */}
+                        {input.label === "subheading" && (
+                          <TitleInput onJsonData={handleJsonData} blockId={input.id}/>
+                        )}
+
+                        {/* Media entry */}
+                        {(input.label === "slideshow" || input.label === "photo" || input.label === "video") && (
+                          <MediaInput inputType={input.label} onJsonData={handleJsonData} blockId={input.id}/>
+                        )}
+
+                        {/* Card set entry */}
+                        {input.label === "cards" && (
+                          <PairsInput inputValue={"cards"} onJsonData={handleJsonData} blockId={input.id}/>
+                        )}
+                      </div>
+                      <div 
+                        className={(input.isHovered && !isDragging) || snapshot.isDragging ? "button-options" : "button-options transparent"}
+                      >
+                        <button onClick={() => addNewInputBelow(index)}>
+                          <i className="fas fa-plus"></i>
+                        </button>
+                        {/* <button className="edit-button">
+                          <i className="fas fa-edit"></i>
+                        </button>*/}
+                        <button className="delete-button" onClick={() => handleDeleteButtonClick(input.id)}>
+                          <i className="fas fa-trash-alt"></i>
+                        </button>
                       </div>
                     </div>
-
-               
-                    {/* This div will be filled with content corresponding to its label */}
-                    <div className="input-container">
-                      {/* <label>{capitalizeFirstLetter(input.label)}</label>*/}
-
-                      {/* Paragraph entry */}
-                      {input.label === "paragraph" && (
-                        <ParagraphInput onJsonData={handleJsonData} blockId={input.id}/>
-                      )}
-
-                      {/* Code entry */}
-                      {input.label === "code" && (
-                        <CodeInput onJsonData={handleJsonData} blockId={input.id}/>
-                      )}
-                      {/* Subheading entry */}
-                      {input.label === "subheading" && (
-                        <TitleInput onJsonData={handleJsonData} blockId={input.id}/>
-                      )}
-
-                      {/* Media entry */}
-                      {input.label === "slideshow" || input.label === "photo" || input.label === "video" && (
-                        <MediaInput inputType={input.label} onJsonData={handleJsonData} blockId={input.id}/>
-                      )}
-
-                      {/* Card set entry */}
-                      {input.label === "cards" && (
-                        <PairsInput inputValue={"cards"} onJsonData={handleJsonData} blockId={input.id}/>
-                      )}
-                    </div>
-                    <div 
-                      className={(input.isHovered && !isDragging) || snapshot.isDragging ? "button-options" : "button-options transparent"}
-                    >
-                      <button onClick={() => addNewInputBelow(index)}>
-                        <i className="fas fa-plus"></i>
-                      </button>
-                      {/* <button className="edit-button">
-                        <i className="fas fa-edit"></i>
-                      </button>*/}
-                      <button className="delete-button" onClick={() => handleDeleteButtonClick(input.id)}>
-                        <i className="fas fa-trash-alt"></i>
-                      </button>
-                    </div>
-                  </div>
-            {
-                (input.newBelow && !isDragging) && (
                     <div className="new-input-select">
-                            <div className="add-input">
-                                <select value={selectedOption} onChange={handleSelectChange}>
-                                    {/*<option value="heading">Heading</option>*/}
-                                    <option value="subheading">Subheading</option>
-                                    <option value="paragraph">Paragraph</option>
-                                    <option value="photo">Photo</option>
-                                    <option value="slideshow">Slideshow</option>
-                                    <option value="video">Video</option>
-                                    <option value="cards">Flashcards/Quiz</option>
-                                    <option value="game">Game</option>
-                                    <option value="code">Code</option>
-                                </select>
-                                <button onClick={() => handleAddButtonClickBelow(index)}><i className="fas fa-check"></i></button>
-                                <button onClick={() => cancelNewInputBelow(index)}><i className="fas fa-times"></i></button>
-                            </div>
+                    {(input.newBelow && !isDragging) && (
+                      <InputSelect
+                        selectedOption={selectedOption}
+                        handleSelectChange={handleSelectChange}
+                        handleAddButtonClick={handleAddButtonClickBelow}
+                        cancelNewInput={cancelNewInputBelow}
+                        index={index}
+                      />
+                    )}
                     </div>
-                )
-            }
-
-                    {/* <div className="bottom-box">
-                      ----- + -----
-                    </div>*/}
                   </div>
                 )}
               </Draggable>
@@ -382,21 +358,14 @@ const Form = () => {
       {!addNew ? (
           <button onClick={addNewInput}><i className="fas fa-plus"></i></button>
       ) : (
-        <div className="add-input">
-          <select value={selectedOption} onChange={handleSelectChange}>
-              {/*<option value="heading">Heading</option>*/}
-              <option value="subheading">Subheading</option>
-              <option value="paragraph">Paragraph</option>
-              <option value="photo">Photo</option>
-              <option value="slideshow">Slideshow</option>
-              <option value="video">Video</option>
-              <option value="cards">Flashcards/Quiz</option>
-              <option value="game">Game</option>
-              <option value="code">Code</option>
-          </select>
-          <button onClick={handleAddButtonClick}><i className="fas fa-plus"></i></button>
-          <button onClick={cancelNewInput}><i className="fas fa-times"></i></button>
-        </div>
+
+        <InputSelect
+          selectedOption={selectedOption}
+          handleSelectChange={handleSelectChange}
+          handleAddButtonClick={handleAddButtonClick}
+          cancelNewInput={cancelNewInput}
+          index={null}
+        />
       )}
       </div>
       <div className="form-options">

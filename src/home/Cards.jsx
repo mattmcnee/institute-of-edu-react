@@ -1,7 +1,7 @@
 import React, { useRef, useMemo  } from 'react';
 import { Link } from 'react-router-dom';
 
-const CardScroll = ({ title, data }) => {
+const CardScroll = ({ title, data, type }) => {
   const scrollContainerRef = useRef(null);
 
   const scrollLeft = () => {
@@ -43,9 +43,16 @@ const CardScroll = ({ title, data }) => {
             <i className="fas fa-search"></i>
           </button>
         </div>
-        <Link to="/create">
-        <button className="add-card">+</button>
-        </Link>
+        {type == "sheet" ? (
+          <Link to="/new-sheet">
+            <button className="add-card">+</button>
+          </Link>
+        ) : (
+          <Link to="/new-cards">
+            <button className="add-card">+</button>
+          </Link>
+        )}
+
       </div>
 {/*      <div className="title-box">
         <span className="card-title">Worksheets</span>

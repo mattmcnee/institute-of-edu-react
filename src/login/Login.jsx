@@ -56,9 +56,8 @@ const Login = ({ setTitle }) => {
         const user = userCredential.user;
         writeUserData(user.uid, 'John Blue', email);
         setError(null);
-        
-        // Redirect to '/worksheet'
-        navigate('/worksheet')
+
+        navigate('/')
       })
       .catch((error) => {
         setError(error.message);

@@ -56,8 +56,8 @@ const Home = ({setTitle}) => {
         </div>
       </div>
       
-      <CardScroll title="Featured Games" data={cardData2} />
-      <CardScroll title="Featured Worksheets" data={cardData} />
+      <CardScroll title="Featured Games" data={cardData2} type="card"/>
+      <CardScroll title="Featured Worksheets" data={cardData} type="sheet"/>
     </div>
   );
 };
