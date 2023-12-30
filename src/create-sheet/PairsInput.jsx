@@ -1,10 +1,48 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import { initializeApp } from 'firebase/app';
+import { getDatabase, ref, set, push } from 'firebase/database';
+import { getAuth, onAuthStateChanged  } from 'firebase/auth';
 import './form.css';
+
+// Configure and initialize firebase
+const firebaseConfig = {
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID
+};
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+const auth = getAuth(app);
+
 
 const PairsInput = ({ inputValue, onJsonData, blockId }) => {
   const [inputs, setInputs] = useState([{ id: 0, key: 0, textarea1: "", textarea2: "", }]);
   const [rotatedButtons, setRotatedButtons] = useState({});
+  const [jsonData, setJsonData] = useState([]);
+
+  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUserId, setCurrentUserId] = useState(null);
+
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, update the current user state
+        setCurrentUser(user.displayName || user.email);
+        setCurrentUserId(user.uid);
+      } else {
+        // User is signed out, set currentUser to null
+        setCurrentUser(null);
+        setCurrentUserId(null);
+      }
+      console.log(currentUser);
+    });
+
+    // Clean up the subscription when the component unmounts
+    return () => unsubscribe();
+  }, []);
 
   const handleInput = (event, id, textareaNumber) => {
     const updatedInputs = inputs.map((input) => {
@@ -19,18 +57,40 @@ const PairsInput = ({ inputValue, onJsonData, blockId }) => {
 
     const textarea = event.target;
     textarea.style.height = 'auto';
-    textarea.style.height = textarea.scrollHeight + 5 + 'px';
+    textarea.style.height = textarea.scrollHeight + 'px';
 
     setInputs(updatedInputs);
-    returnJsonData(updatedInputs);
+    // returnJsonData(updatedInputs);
+  };
+
+  const handleSubmit = () => {
+    console.log(inputs)
+    const updatedFormValues = inputs.map((input, index) => {
+      // Find all objects in jsonData where id matches input.id
+      const matchedObjects = jsonData.filter((item) => item.id === input.id);
+
+      // Extract data from the matched objects
+      const matchedData = matchedObjects.map((matchedItem) => matchedItem.data);
+      const newData = (matchedData.length > 0) ? matchedData[0] : null;
+
+      return {
+        "textarea1": input.textarea1,
+        "textarea2": input.textarea2,
+        id: input.id,
+        order: index
+      };
+    });
+    console.log(updatedFormValues)
+    writeUserData(updatedFormValues);
+    // console.log("Form Values:", updatedFormValues);
   };
 
   const writeUserData = (data) => {
     if(currentUserId){
       console.log(data)
       const sheetData = {
-        title: title,
-        data: convertToFirebaseFormat(data)
+        title: "title",
+        data: data
       };
       console.log(currentUser);
       
@@ -44,7 +104,7 @@ const PairsInput = ({ inputValue, onJsonData, blockId }) => {
       "id": blockId,
       "data": newInputs
     }
-    onJsonData(sendBack);
+    // onJsonData(sendBack);
   }
 
   const handleSwapButtonClick = (id) => {
@@ -60,7 +120,7 @@ const PairsInput = ({ inputValue, onJsonData, blockId }) => {
     });
 
     setInputs(updatedInputs);
-    returnJsonData(updatedInputs);
+    // returnJsonData(updatedInputs);
 
     setRotatedButtons(prevState => ({
       ...prevState,
@@ -91,7 +151,7 @@ const PairsInput = ({ inputValue, onJsonData, blockId }) => {
   const handleDeleteButtonClick = (id) => {
     const updatedInputs = inputs.filter((input) => input.id !== id);
     setInputs(updatedInputs);
-    returnJsonData(updatedInputs);
+    // returnJsonData(updatedInputs);
   };
 
   const onDragEnd = (result) => {
@@ -104,7 +164,7 @@ const PairsInput = ({ inputValue, onJsonData, blockId }) => {
     reorderedInputs.splice(result.destination.index, 0, removed);
 
     setInputs(reorderedInputs);
-    returnJsonData(reorderedInputs);
+    // returnJsonData(reorderedInputs);
   };
 
   return (
@@ -177,7 +237,7 @@ const PairsInput = ({ inputValue, onJsonData, blockId }) => {
           <button>Save Draft</button>
         </div>
       <div className="submit-form">
-          <button>Submit</button>
+          <button onClick={handleSubmit}>Submit</button>
         </div>
       </div>
     </DragDropContext>

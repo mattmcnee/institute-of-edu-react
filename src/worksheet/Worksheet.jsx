@@ -9,6 +9,7 @@ import './worksheet.css';
 
 const Worksheet = ({ setTitle }) => {
   const [worksheetData, setWorksheetData] = useState([]);
+  const [cardsData, setCardsData] = useState([]);
   const [loading, setLoading] = useState(true);
   let { id } = useParams();
 
@@ -18,6 +19,8 @@ const Worksheet = ({ setTitle }) => {
     // Firebase database reference to the specific location
     const db = getDatabase();
     const worksheetRef = ref(db, `/sheets/${id}`);
+    const cardsRef = ref(db, `/cards/-Nmv2UvDw3pJHy1Z2nwG`);
+
     
     // Fetch the data from Firebase
     get(worksheetRef)
@@ -26,6 +29,23 @@ const Worksheet = ({ setTitle }) => {
           const firebaseData = snapshot.val().data;
           const cleanedSections = convertToJsonArray(firebaseData);
           setWorksheetData(cleanedSections);
+          console.log(cleanedSections);
+        } else {
+          console.log('No data available');
+        }
+        setLoading(false); // Mark loading as complete
+      })
+      .catch((error) => {
+        console.error('Error getting data:', error);
+        setLoading(false); // Mark loading as complete, even in case of an error
+      });
+
+    get(cardsRef)
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          const firebaseData = snapshot.val().data;
+          const cleanedSections = convertToJsonArray(firebaseData);
+          setCardsData(cleanedSections);
           console.log(cleanedSections);
         } else {
           console.log('No data available');
@@ -95,6 +115,15 @@ const Worksheet = ({ setTitle }) => {
           </div>
           </div>
         ))}
+        <div className="worksheet-section">
+          <div className="content-container">
+            {cardsData.map((section, index) => (
+              <div key={index}> {/* Add key prop here */}
+                {section.textarea1} {section.textarea2}
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
